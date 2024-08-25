@@ -1,0 +1,89 @@
+.dashboardMenu{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.3rem;
+    height: 94dvh;
+    position: fixed;
+    top: 0;
+    left: 0; 
+    padding: 20px;
+}
+
+.logoWname{
+    display: flex;
+    position: relative;
+    top: 15px;
+    left: 20px;
+    align-items: center;
+    display: flex;
+    width: 124px;
+    height: auto;
+}
+
+.icon{
+    width: 33px;
+    height: auto;
+}
+
+.icons{
+    width: 28px;
+    height: auto;
+}
+
+.menuList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.bottom {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.menuList .item {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px;
+    gap: 20px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    transition: 0.3s ease-in-out;
+    color: #333333;
+}
+
+.menuList .item:hover {
+    background-color: #EEEEEE;
+    color: #ffffff;
+    width: 200px;
+}
+
+.menuList .item:hover,
+.active {
+    background-color: #EEEEEE;
+    color: #ffffff !important;
+    width: 200px;
+}
+
+.bottom .item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-radius: 15px;
+    transition: 0.3s ease-in-out;
+    color: #333333;
+}
+
+.bottom .item:hover {
+    background-color: #707070;
+    color: #ffffff;
+}
+

@@ -1,0 +1,234 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 15px;
+  line-height: 1.1;
+  font-weight: 400;
+  color: #707070;
+  position: absolute;
+  top: 190px;
+  left: 130px;
+  margin: 10px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h3 {
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 600;
+  color: #333333;
+  position: absolute;
+  top: 150px;
+  left: 150px;
+  margin: 10px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h2, h4 {
+  left: 110px;
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 500;
+  color: #333333;
+  position: absolute;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h2{
+  top: 250px;
+  margin: 10px;
+}
+
+h4{
+  top: 355px;
+  margin: 10px;
+}
+
+h6{
+  font-size: 14px;
+  line-height: 1.1;
+  font-weight: 400;
+  color: #58595B;
+  position: absolute;
+  top: 425px;
+  left: 300px;
+  margin: 10px; 
+  text-decoration: underline;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.section-left{
+  display: flex;
+  position:absolute;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 638px;
+  height: 616px;
+  top: 0;
+  left: 0;
+  width: calc(100% - 805px);
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 5px 5px 5px 0px #58595B;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+.section-left img {
+  width: 95px; 
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+}
+
+.section-right {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 705px;
+  height: 100%;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  left: 70px;
+  margin-bottom: auto;
+}
+
+.logo {
+  width: 150px; 
+  height: auto;
+  margin-right: 5px;
+}
+
+.appName {
+  width: 350px; 
+  height: auto;
+}
+
+.background-image {
+  width: 710px;
+  height: auto;
+  position: relative;
+  bottom: 0;
+  right: 15px;
+}
+
+.inputPass-container {
+  top: 310px;
+  left: 100px;
+  position: relative;
+  width: 300px;
+  height: 40px;
+  margin: 10px 0;
+}
+
+.inputEmail-container {
+  top: 255px;
+  left: 100px;
+  position: relative;
+  width: 300px;
+  height: 40px;
+  margin: 10px 0;
+}
+
+.input-icon {
+  position: absolute;
+  top: 10px !important;
+  transform: translateY(-50%);
+  width: 34px !important; 
+  height: 34px ;
+}
+
+.email-input,
+.password-input {
+  width: 240px;
+  height: 40px;
+  padding-left: 50px;
+  padding-right: 10px;
+  border-radius: 10px;
+  background-color: #D8D8D8;
+  border: none;
+}
+
+.email-input:focus,
+.password-input:focus {
+  outline: none;
+  border: 1px solid #646cff;
+}
+
+button {
+  position: absolute;
+  top: 540px;
+  left: 120px;
+  border-radius: 10px;
+  width: 300px;
+  height: 50px;
+  border: none;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #333333;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  color: white;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
