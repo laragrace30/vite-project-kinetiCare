@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface ToggleButtonProps {
     isActive: boolean;
-    onToggle: () => void;
+    onToggle: (event: ChangeEvent<HTMLInputElement>) => void; 
 }
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({ isActive, onToggle }) => {

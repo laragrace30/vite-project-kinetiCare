@@ -93,7 +93,7 @@ h6{
   justify-content: flex-start;
   align-items: flex-start;
   width: 638px;
-  height: 616px;
+  height: 650px;
   top: 0;
   left: 0;
   width: calc(100% - 805px);
@@ -232,3 +232,76 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.card-container{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  margin-top: 2rem;
+  width: 100%; 
+}
+
+.card{
+  flex: 1;
+  background-color: #5A8DEE;
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  transition: 0.5s ease-in-out;
+  min-width: 250px;
+  position: relative;
+  top: 100px;
+}
+
+.card img {
+  display: flex;
+  position: relative;
+  bottom: 210px;
+  left: 100px;
+  width: 50px;
+  height: 50px;
+}
+
+.card:hover{
+  transform: scale(1.04);
+  cursor: pointer;
+}
+
+h5{
+  display: flex;
+  position: relative;
+  bottom: 25px;
+  right: 50px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+p{
+  color: white;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.icon-notify{
+  display: flex;
+  position: absolute;
+  border: #333333 2px solid;
+  border-radius: 10px;
+  padding: 10px;
+  bottom: 490px;
+  right: 80px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  width: 35px;
+  height: auto;
+}
+
+
+
+

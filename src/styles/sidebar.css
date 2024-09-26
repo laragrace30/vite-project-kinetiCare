@@ -65,7 +65,7 @@
 .menuList .item:hover,
 .active {
     background-color: #EEEEEE;
-    color: #ffffff !important;
+    color: #333333 !important;
     width: 200px;
 }
 

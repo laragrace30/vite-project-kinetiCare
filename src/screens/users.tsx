@@ -56,7 +56,7 @@ function Users() {
     };
 
     const handleToggleStatus = (id: string, currentStatus: string) => {
-        const newStatus = currentStatus.toLowerCase() === 'active' ? 'inactive' : 'active';
+        const newStatus = currentStatus.toLowerCase() === 'active' ? 'Inactive' : 'Active'; 
         console.log(`Toggling user with ID: ${id} to ${newStatus}`);
 
         if (activeTab === 0) {
@@ -124,8 +124,11 @@ function Users() {
                                             <td>{therapist.specialization}</td>
                                             <td>
                                                 <ToggleButton 
-                                                    isActive={therapist.status.toLowerCase() === 'active'}
-                                                    onToggle={() => handleToggleStatus(therapist.id, therapist.status)}
+                                                    isActive={therapist.status.toLowerCase() === 'active'} 
+                                                    onToggle={(e) => {
+                                                        e.stopPropagation(); 
+                                                        handleToggleStatus(therapist.id, therapist.status);
+                                                    }}
                                                 />
                                             </td>
                                         </tr>
@@ -155,8 +158,11 @@ function Users() {
                                             <td>{patient.briefDescription}</td>
                                             <td>
                                                 <ToggleButton 
-                                                    isActive={patient.status.toLowerCase() === 'active'}
-                                                    onToggle={() => handleToggleStatus(patient.id, patient.status)}
+                                                    isActive={patient.status.toLowerCase() === 'active'} 
+                                                    onToggle={(e) => {
+                                                        e.stopPropagation();
+                                                        handleToggleStatus(patient.id, patient.status);
+                                                    }}
                                                 />
                                             </td>
                                         </tr>
