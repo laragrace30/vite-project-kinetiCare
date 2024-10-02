@@ -7,7 +7,7 @@ import notification from '../assets/notification.png';
 const Content = () => {
   const [therapistCount, setTherapistCount] = useState(0);
   const [patientCount, setPatientCount] = useState(0);
-  // const [commissionEarned, setCommissionEarned] = useState(0);
+  const [commissionEarned, setCommissionEarned] = useState(0);
   
   useEffect(() => {
     const fetchCounts = async () => {
@@ -23,10 +23,16 @@ const Content = () => {
         const patientSnapshot = await getDocs(patientQuery);
         setPatientCount(patientSnapshot.size); 
 
-        // // Fetch commission earned (if needed)
-        // const commissionData = await fetch('your-backend-url/commission'); // Replace with actual API URL
-        // const commission = await commissionData.json();
-        // setCommissionEarned(commission.total);
+        const paymentsCollection = collection(db, "payments"); 
+        const paymentsSnapshot = await getDocs(paymentsCollection);
+
+        let totalCommission = 0;
+        paymentsSnapshot.forEach(doc => {
+          totalCommission += doc.data().convenienceFee || 0; 
+        });
+
+        setCommissionEarned(totalCommission);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -48,7 +54,7 @@ const Content = () => {
     },
     {
       title: 'Commission Earned',
-      content: 'content',
+      content: `PHP ${commissionEarned}`,
       image: "src/assets/commission.png"
     }
   ]

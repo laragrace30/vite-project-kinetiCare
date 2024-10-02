@@ -7,6 +7,7 @@ import SideMenu from '../components/sideMenu';
 
 interface Therapist {
     firstName: string;
+    middleName: string;
     lastName: string;
     email: string;    
     experience: string;
@@ -15,6 +16,10 @@ interface Therapist {
     specialization: string;
     gender: string;
     status: string;
+    clinic: string;
+    clinicAddress: string;
+    birthDate: string;
+    licenseImageUrl: string;
   }
 
 function TherapistDetails() {
@@ -75,7 +80,7 @@ function TherapistDetails() {
         <div className="details">
         <div className="details-header">
               <p><span>First Name:</span> {therapist.firstName}</p>
-              <p><span>Middle Name:</span></p>
+              <p><span>Middle Name:</span>{therapist.middleName}</p>
               <p><span>Last Name:</span> {therapist.lastName}</p>
               <p><span>Specialization:</span> {therapist.specialization}</p>
               <p><span>Experience:</span> {therapist.experience}</p>
@@ -83,12 +88,22 @@ function TherapistDetails() {
           </div>
           <div className="details-info">
               <p><span>Gender:</span> {therapist.gender}</p>
-              <p><span>DOB:</span> </p>
+              <p><span>DOB:</span> {therapist.birthDate}</p>
               <p><span>Email:</span> {therapist.email}</p>
               <p><span>Contact Number:</span> {therapist.phone}</p>
-              <p><span>Hospital/Clinic:</span> </p>
-              <p><span>Address:</span> </p>
+              <p><span>Hospital/Clinic:</span>{therapist.clinic} </p>
+              <p><span>Address:</span> {therapist.clinicAddress}</p>
           </div>
+            {therapist.licenseImageUrl && (
+                <div className="license-image-container">
+                    <h3>License:</h3>
+                    <img 
+                        src={therapist.licenseImageUrl} 
+                        alt="Therapist License" 
+                        className="license-image" 
+                    />
+                </div>
+                )}
         </div>
         <div className='buttons'>
         {therapist.status !== 'active' ? (
