@@ -58,9 +58,9 @@ function TherapistDetails() {
       try {
           if (id) {
               const docRef = doc(db, 'users', id);
-              await updateDoc(docRef, { status: 'active' });
+              await updateDoc(docRef, { status: 'Active' });
               setTherapist((prevTherapist) =>
-                  prevTherapist ? { ...prevTherapist, status: 'active' } : prevTherapist
+                  prevTherapist ? { ...prevTherapist, status: 'Active' } : prevTherapist
               );
           }
       } catch (error) {
@@ -106,7 +106,7 @@ function TherapistDetails() {
                 )}
         </div>
         <div className='buttons'>
-        {therapist.status !== 'active' ? (
+        {therapist.status !== 'Active' ? (
                 <>
                     <button className='approve' onClick={handleApprove}>
                         Approve

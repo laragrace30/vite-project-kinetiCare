@@ -21,6 +21,7 @@ function Users() {
     const [activeTab, setActiveTab] = useState(0);
     const [therapists, setTherapists] = useState<User[]>([]);
     const [patients, setPatients] = useState<User[]>([]);
+    const [isUpdating, setIsUpdating] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,38 +52,71 @@ function Users() {
     }, [activeTab]);
 
     const updateUserStatus = async (id: string, newStatus: string) => {
-        const userDoc = doc(db, 'users', id);
-        await updateDoc(userDoc, { status: newStatus });
+        if (isUpdating) return;
+        
+        setIsUpdating(true);
+        try {
+            const userDoc = doc(db, 'users', id);
+            await updateDoc(userDoc, { status: newStatus });
+            
+            if (activeTab === 0) {
+                setTherapists(prev =>
+                    prev.map(therapist =>
+                        therapist.id === id ? { ...therapist, status: newStatus } : therapist
+                    )
+                );
+            } else {
+                setPatients(prev =>
+                    prev.map(patient =>
+                        patient.id === id ? { ...patient, status: newStatus } : patient
+                    )
+                );
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        } finally {
+            setIsUpdating(false);
+        }
     };
 
-    const handleToggleStatus = (id: string, currentStatus: string) => {
-        const newStatus = currentStatus.toLowerCase() === 'active' ? 'Inactive' : 'Active'; 
-        console.log(`Toggling user with ID: ${id} to ${newStatus}`);
-
-        if (activeTab === 0) {
-            setTherapists(prevTherapists =>
-                prevTherapists.map(therapist =>
-                    therapist.id === id ? { ...therapist, status: newStatus } : therapist
-                )
-            );
-        } else if (activeTab === 1) {
-            setPatients(prevPatients =>
-                prevPatients.map(patient =>
-                    patient.id === id ? { ...patient, status: newStatus } : patient
-                )
-            );
-        }
-
+    const handleToggleStatus = (e: React.MouseEvent, id: string, currentStatus: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const newStatus = currentStatus.toLowerCase() === 'active' ? 'Inactive' : 'Active';
         updateUserStatus(id, newStatus);
     };
 
-    const handleTap = (userId: string) => {
-        if (activeTab === 0) {
-            navigate(`/therapistDetails/${userId}`);
-        } else if (activeTab === 1) {
-            navigate(`/patientDetails/${userId}`);
+    const handleRowClick = (e: React.MouseEvent, userId: string) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest('.toggle-button')) {
+            if (activeTab === 0) {
+                navigate(`/therapistDetails/${userId}`);
+            } else {
+                navigate(`/patientDetails/${userId}`);
+            }
         }
     };
+
+    const renderUserRow = (user: User) => (
+        <tr
+            key={user.id}
+            onClick={(e) => handleRowClick(e, user.id)}
+            className='users-row'
+        >
+            <td>{user.firstName} {user.lastName}</td>
+            <td>{user.status}</td>
+            <td>{user.email}</td>
+            <td>{activeTab === 0 ? user.specialization : user.briefDescription}</td>
+            <td onClick={e => e.stopPropagation()}>
+                <ToggleButton 
+                    isActive={user.status.toLowerCase() === 'active'}
+                    onToggle={(e) => handleToggleStatus(e, user.id, user.status)}
+                    disabled={isUpdating}
+                />
+            </td>
+        </tr>
+    );
 
     return (
         <div className="container">
@@ -103,74 +137,25 @@ function Users() {
                     </div>
                 </div>
                 <div className="content-tabs">
-                    {activeTab === 0 && (
-                        <div className="content active-content">
-                            <table className="users-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Status</th>
-                                        <th>Email</th>
-                                        <th>Specialization</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {therapists.map((therapist) => (
-                                        <tr key={therapist.id} onClick={() => handleTap(therapist.id)} className='users-row'>
-                                            <td>{therapist.firstName} {therapist.lastName}</td>
-                                            <td>{therapist.status}</td>
-                                            <td>{therapist.email}</td>
-                                            <td>{therapist.specialization}</td>
-                                            <td>
-                                                <ToggleButton 
-                                                    isActive={therapist.status.toLowerCase() === 'active'} 
-                                                    onToggle={(e) => {
-                                                        e.stopPropagation(); 
-                                                        handleToggleStatus(therapist.id, therapist.status);
-                                                    }}
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-                    {activeTab === 1 && (
-                        <div className="content active-content">
-                            <table className="patients-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Status</th>
-                                        <th>Email</th>
-                                        <th>Health Condition</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {patients.map((patient) => (
-                                        <tr key={patient.id} onClick={() => handleTap(patient.id)} className='users-row'>
-                                            <td>{patient.firstName} {patient.lastName}</td>
-                                            <td>{patient.status}</td>
-                                            <td>{patient.email}</td>
-                                            <td>{patient.briefDescription}</td>
-                                            <td>
-                                                <ToggleButton 
-                                                    isActive={patient.status.toLowerCase() === 'active'} 
-                                                    onToggle={(e) => {
-                                                        e.stopPropagation();
-                                                        handleToggleStatus(patient.id, patient.status);
-                                                    }}
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
+                    <div className="content active-content">
+                        <table className={activeTab === 0 ? "users-table" : "patients-table"}>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Email</th>
+                                    <th>{activeTab === 0 ? 'Specialization' : 'Health Condition'}</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {activeTab === 0
+                                    ? therapists.map(renderUserRow)
+                                    : patients.map(renderUserRow)
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@ import React, { ChangeEvent } from 'react';
 interface ToggleButtonProps {
     isActive: boolean;
     onToggle: (event: ChangeEvent<HTMLInputElement>) => void; 
+    disabled?: boolean; 
 }
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({ isActive, onToggle }) => {
