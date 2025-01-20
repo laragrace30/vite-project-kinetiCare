@@ -50,6 +50,10 @@ function TherapistDetails() {
         fetchTherapist();
     }, [id]);
 
+    const getInitials = (firstName: string, lastName: string) => {
+        return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    };
+
     if (!therapist) {
         return <div>Loading...</div>;
     }
@@ -79,6 +83,11 @@ function TherapistDetails() {
         </div>
         <div className="details">
         <div className="details-header">
+              <div className="avatar-section">
+                <div className="initials-avatar">
+                    {getInitials(therapist.firstName, therapist.lastName)}
+                </div>
+              </div>
               <p><span>First Name:</span> {therapist.firstName}</p>
               <p><span>Middle Name:</span>{therapist.middleName}</p>
               <p><span>Last Name:</span> {therapist.lastName}</p>

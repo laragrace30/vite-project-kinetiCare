@@ -168,3 +168,25 @@ p {
     height: 57px;
     padding: 13.5px;
 }
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-top: 20px;
+    margin-right: 80px;
+}
+
+.initials-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}

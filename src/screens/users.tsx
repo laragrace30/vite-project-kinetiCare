@@ -22,6 +22,8 @@ function Users() {
     const [therapists, setTherapists] = useState<User[]>([]);
     const [patients, setPatients] = useState<User[]>([]);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -98,6 +100,12 @@ function Users() {
         }
     };
 
+    const currentUsers = activeTab === 0 ? therapists : patients;
+    const totalPages = Math.ceil(currentUsers.length / itemsPerPage);
+    const indexOfLastUser = currentPage * itemsPerPage;
+    const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+    const currentItems = currentUsers.slice(indexOfFirstUser, indexOfLastUser);
+
     const renderUserRow = (user: User) => (
         <tr
             key={user.id}
@@ -145,16 +153,38 @@ function Users() {
                                     <th>Status</th>
                                     <th>Email</th>
                                     <th>{activeTab === 0 ? 'Specialization' : 'Health Condition'}</th>
-                                    <th>Action</th>
+                                    <th>Activate/Deactivate</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {activeTab === 0
-                                    ? therapists.map(renderUserRow)
-                                    : patients.map(renderUserRow)
-                                }
+                                {currentItems.map(renderUserRow)}
                             </tbody>
                         </table>
+                        {totalPages > 1 && (
+                            <div className="pagination">
+                                <span 
+                                    onClick={() => currentPage > 1 && setCurrentPage(prev => prev - 1)}
+                                    className={`pagination-nav ${currentPage === 1 ? 'disabled' : ''}`}
+                                >
+                                    &lt;
+                                </span>
+                                {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                                    <span
+                                        key={pageNumber}
+                                        onClick={() => setCurrentPage(pageNumber)}
+                                        className={`pagination-number ${currentPage === pageNumber ? 'active' : ''}`}
+                                    >
+                                        {pageNumber}
+                                    </span>
+                                ))}
+                                <span 
+                                    onClick={() => currentPage < totalPages && setCurrentPage(prev => prev + 1)}
+                                    className={`pagination-nav ${currentPage === totalPages ? 'disabled' : ''}`}
+                                >
+                                    &gt;
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

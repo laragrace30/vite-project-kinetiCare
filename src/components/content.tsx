@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import '../index.css';
 import { db } from '../firebase/firebase';
 import { collection, getDocs, query, where } from "firebase/firestore";
-import notification from '../assets/notification.png';
 
 const Content = () => {
   const [therapistCount, setTherapistCount] = useState(0);
@@ -60,8 +59,6 @@ const Content = () => {
   ]
 
   return (
-    <div className='notification'>
-      <img src={notification} alt="Notification Icon" className='icon-notify'/>
     <div className='card-container'>
       {card.map((card) => (
         <div className='card' key={card.title}>
@@ -71,7 +68,6 @@ const Content = () => {
         </div>
       ))}
       </div>
-    </div>
   );
 };
 

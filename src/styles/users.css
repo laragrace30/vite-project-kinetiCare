@@ -45,7 +45,7 @@
 .users-table td{
     padding: 8px;
     border-bottom: #00BFA6 1px solid;
-    text-align: left;
+    text-align: center;
 }
 
 .users-table .users-row:hover{
@@ -164,4 +164,36 @@ input:checked + .slider:before {
 .patients-table .users-row:hover{
     background: #707070;
     color: #ffffff;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.pagination-nav {
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+    user-select: none;
+    margin: 0 5px;
+}
+
+.pagination-nav.disabled {
+    color: #ccc;
+    cursor: default;
+}
+
+.pagination-number {
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    padding: 0 2px;
+    user-select: none;
+}
+
+span.pagination-number.active {
+    color: blue !important;
+    font-weight: bold !important;
 }

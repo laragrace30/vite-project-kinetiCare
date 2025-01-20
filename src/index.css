@@ -238,7 +238,6 @@ button:focus-visible {
   flex-direction: row;
   gap: 20px;
   align-items: center;
-  margin-top: 2rem;
   width: 100%; 
 }
 
@@ -254,7 +253,7 @@ button:focus-visible {
   transition: 0.5s ease-in-out;
   min-width: 250px;
   position: relative;
-  top: 100px;
+  top: 10px;
 }
 
 .card img {
@@ -286,21 +285,6 @@ p{
   color: white;
   font-size: 30px;
   font-weight: 500;
-}
-
-.icon-notify{
-  display: flex;
-  position: absolute;
-  border: #333333 2px solid;
-  border-radius: 10px;
-  padding: 10px;
-  bottom: 490px;
-  right: 80px;
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-  width: 35px;
-  height: auto;
 }
 
 

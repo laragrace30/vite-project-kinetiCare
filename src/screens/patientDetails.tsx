@@ -19,7 +19,7 @@ interface Patient {
     contactPhone: string;
     birthDate: string;
     relationship: string;
-  }
+}
 
 function PatientDetails() {
     const { id } = useParams<{ id: string }>();
@@ -49,40 +49,48 @@ function PatientDetails() {
         fetchPatient();
     }, [id]);
 
+    const getInitials = (firstName: string, lastName: string) => {
+        return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    };
+
     if (!patient) {
         return <div>Loading...</div>;
     }
 
-
-  return (
-    <div className='container'>
-      <SideMenu />
-      <div className="details--content">
-        <div className='header'>
-            <h2 className='personalDetails'>Personal Details</h2>
-            <h2 className='emergencyDetails'>Emergency Contact</h2>
+    return (
+        <div className='container'>
+            <SideMenu />
+            <div className="details--content">
+                <div className='header'>
+                    <h2 className='personalDetails'>Personal Details</h2>
+                    <h2 className='emergencyDetails'>Emergency Contact</h2>
+                </div>
+                <div className="details">
+                    <div className="details-header">
+                        <div className="avatar-section">
+                            <div className="initials-avatar">
+                                {getInitials(patient.firstName, patient.lastName)}
+                            </div>
+                        </div>
+                        <p><span>First Name:</span> {patient.firstName}</p>
+                        <p><span>Middle Name:</span> {patient.middleName}</p>
+                        <p><span>Last Name:</span> {patient.lastName}</p>
+                        <p><span>First Name:</span> {patient.contactFirstName}</p>
+                        <p><span>Middle Name:</span> {patient.contactMiddleName}</p>
+                        <p><span>Last Name:</span> {patient.contactLastName}</p>
+                    </div>
+                    <div className="details-info">
+                        <p><span>Gender:</span> {patient.gender}</p>
+                        <p><span>Date of Birth:</span> {patient.birthDate}</p>
+                        <p><span>Email:</span> {patient.email}</p>
+                        <p><span>Contact Number:</span> {patient.phone}</p>
+                        <p><span>Relationship:</span> {patient.relationship}</p>
+                        <p><span>Contact Number:</span> {patient.contactPhone}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div className="details">
-        <div className="details-header">
-              <p><span>First Name:</span> {patient.firstName}</p>
-              <p><span>Middle Name:</span> {patient.middleName}</p>
-              <p><span>Last Name:</span> {patient.lastName}</p>
-              <p><span>First Name:</span> {patient.contactFirstName}</p>
-              <p><span>Middle Name:</span> {patient.contactMiddleName}</p>
-              <p><span>Last Name:</span> {patient.contactLastName}</p>
-          </div>
-          <div className="details-info">
-              <p><span>Gender:</span> {patient.gender}</p>
-              <p><span>Date of Birth:</span> {patient.birthDate}</p>
-              <p><span>Email:</span> {patient.email}</p>
-              <p><span>Contact Number:</span> {patient.phone}</p>
-              <p><span>Relationship:</span> {patient.relationship}</p>
-              <p><span>Contact Number:</span> {patient.contactPhone}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default PatientDetails;
