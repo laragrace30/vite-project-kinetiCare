@@ -1,0 +1,61 @@
+.feedback-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    height: calc(100% - 60px);
+    overflow: hidden;
+  }
+  
+  .feedback-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 100%;
+    overflow: hidden;
+  }
+  
+  .feedback-section h3 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .feedback-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  .feedback-card {
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 15px;
+    padding-top: 20%;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left; /* Aligns text to the left */
+    display: flex;
+    flex-direction: column; /* Ensure items stack vertically */
+    align-items: flex-start; /* Align items to the left */
+  }
+  
+  .patient-feedback {
+    border-right: 1px solid #ddd;
+  }
+  
+  .feedback-card p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 20px;
+  }
+  
+  .feedback-card strong {
+    font-weight: bold;
+  }
+  

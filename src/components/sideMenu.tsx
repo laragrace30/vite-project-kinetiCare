@@ -1,7 +1,7 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import '../styles/sidebar.css';
-import { logo, dashboard, users, reports, feedback, settings, logout } from '../assets';
+import { logo, dashboard, users, reports, feedback, logout } from '../assets';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 
@@ -42,10 +42,10 @@ function SideMenu() {
             </Link>
           </div>
           <div className='bottom'>
-            <Link to="/settings" className={`item ${isActive('/settings') ? 'active' : ''}`}>
+            {/* <Link to="/settings" className={`item ${isActive('/settings') ? 'active' : ''}`}>
               <img src={settings} alt="Settings Icon" className='icons'/>
               Settings
-            </Link>
+            </Link> */}
             <Link to="/logout" onClick={handleLogout} className={`item ${isActive('/logout') ? 'active' : ''}`}>
               <img src={logout} alt="Logout Icon" className='icons'/>
               Logout

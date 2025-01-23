@@ -81,7 +81,7 @@ function Users() {
         }
     };
 
-    const handleToggleStatus = (e: React.MouseEvent, id: string, currentStatus: string) => {
+    const handleToggleStatus = (e: React.ChangeEvent<HTMLInputElement>, id: string, currentStatus: string) => {
         e.preventDefault();
         e.stopPropagation();
         
