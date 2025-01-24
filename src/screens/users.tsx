@@ -22,8 +22,11 @@ function Users() {
     const [therapists, setTherapists] = useState<User[]>([]);
     const [patients, setPatients] = useState<User[]>([]);
     const [isUpdating, setIsUpdating] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const [currentPages, setCurrentPages] = useState({
+        therapists: 1,
+        patients: 1
+    });
+    const itemsPerPage = 10;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -101,6 +104,17 @@ function Users() {
     };
 
     const currentUsers = activeTab === 0 ? therapists : patients;
+    const currentPage = activeTab === 0 
+        ? currentPages.therapists 
+        : currentPages.patients;
+
+    const setCurrentPage = (pageNumber: number) => {
+        setCurrentPages(prev => ({
+            ...prev,
+            [activeTab === 0 ? 'therapists' : 'patients']: pageNumber
+        }));
+    };
+
     const totalPages = Math.ceil(currentUsers.length / itemsPerPage);
     const indexOfLastUser = currentPage * itemsPerPage;
     const indexOfFirstUser = indexOfLastUser - itemsPerPage;
@@ -133,13 +147,19 @@ function Users() {
                 <div className="tabs-container">
                     <div
                         className={`tabs ${activeTab === 0 ? 'activePT-tabs' : ''}`}
-                        onClick={() => setActiveTab(0)}
+                        onClick={() => {
+                            setActiveTab(0);
+                            setCurrentPages(prev => ({ ...prev, therapists: 1 }));
+                        }}
                     >
                         Physical Therapist
                     </div>
                     <div
                         className={`tab ${activeTab === 1 ? 'activePatient-tabs' : ''}`}
-                        onClick={() => setActiveTab(1)}
+                        onClick={() => {
+                            setActiveTab(1);
+                            setCurrentPages(prev => ({ ...prev, patients: 1 }));
+                        }}
                     >
                         Patients
                     </div>
@@ -163,7 +183,7 @@ function Users() {
                         {totalPages > 1 && (
                             <div className="pagination">
                                 <span 
-                                    onClick={() => currentPage > 1 && setCurrentPage(prev => prev - 1)}
+                                    onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
                                     className={`pagination-nav ${currentPage === 1 ? 'disabled' : ''}`}
                                 >
                                     &lt;
@@ -178,7 +198,7 @@ function Users() {
                                     </span>
                                 ))}
                                 <span 
-                                    onClick={() => currentPage < totalPages && setCurrentPage(prev => prev + 1)}
+                                    onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
                                     className={`pagination-nav ${currentPage === totalPages ? 'disabled' : ''}`}
                                 >
                                     &gt;

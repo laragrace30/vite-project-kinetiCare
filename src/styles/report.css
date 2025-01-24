@@ -1,0 +1,193 @@
+.container{
+    display: flex;
+    gap: 20px;
+    height: 90vh;
+    width: 80vw;
+    position: fixed;
+    top: 10px;
+    left: 220px; 
+    padding: 20px;
+    overflow: auto;
+}
+
+.report--content{
+    background-color: #EEEEEE;
+    height: auto; 
+    min-height: 135vh; 
+    flex: 1;
+    border-radius: 15px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.header--report {
+    background-color: #fff;
+    height: 60px;
+    width: 95%;
+    position: relative;
+    top: 0;
+    left: 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;
+    justify-content: left;  
+    align-items: center;      
+    padding: 0 20px;
+}
+
+.header--report h1 {
+    display: flex;
+    position: relative;
+    top: 0;
+    left: 0;
+    color: black;
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 24px; 
+}
+.monthly{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.monthly--transactions{
+    background-color: #fff;
+    height: 400px;
+    width: 450px;
+    position: relative;
+    top: 20px;
+    left: 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;  
+    align-items: start;      
+    padding: 0 20px;
+}
+
+.monthly--transactions h2{
+    color: blac;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    position: relative;
+    top: 10px;
+    left: 0;
+    display: flex;
+}
+
+.monthly--transactions--header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.monthly--transactions--header select{
+    margin-top: 15px;
+}
+
+.transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .month-dropdown {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+.monthly--users{
+    background-color: #fff;
+    height: 400px;
+    width: 434px;
+    position: relative;
+    top: 20px;
+    left: 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;  
+    align-items: start;      
+    padding: 0 20px;
+}
+
+.monthly--users h2{
+    color: black;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    position: relative;
+    top: 10px;
+    left: 0;
+    display: flex;
+}
+
+.monthly--users--header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.chart-container {
+    width: 434px;
+    height: 400px;
+}
+
+.chart-container-users {
+    width: 434px;
+    height: 350px;
+}
+
+.login--report{
+    background-color: #fff;
+    height: 400px;
+    width: 940px;
+    position: relative;
+    top: 35px;
+    left: 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;  
+    align-items: start;      
+    padding: 0 20px;
+}
+
+.login--report h2{
+    color: black;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    position: relative;
+    top: 10px;
+    left: 0;
+    display: flex;
+}
+
+.login--report--header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.chart-container-logins {
+    width: 100%; 
+    max-width: 1000px; 
+    height: 280px;
+    margin: 0 auto; 
+  }

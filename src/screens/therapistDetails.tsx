@@ -41,9 +41,7 @@ function TherapistDetails() {
         if (docSnap.exists()) {
           const data = docSnap.data();
 
-          // Check if the user is a therapist
           if (data.accountType === "therapist") {
-            // If there's a license file path, fetch the download URL
             if (data.licenseFilePath) {
               const storage = getStorage();
               const fileRef = ref(storage, data.licenseFilePath);
@@ -51,7 +49,6 @@ function TherapistDetails() {
               data.licenseFilePath = downloadURL;
             }
 
-            // Cast the data to Therapist
             setTherapist(data as Therapist);
           } else {
             console.error("This user is not a therapist.");
