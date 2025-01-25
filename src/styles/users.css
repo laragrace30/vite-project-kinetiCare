@@ -38,7 +38,7 @@
 
 .users-table th{
     padding: 8px;
-    text-align: left;
+    text-align: center;
     color:#ffffff;
 }
 
@@ -152,7 +152,7 @@ input:checked + .slider:before {
 
 .patients-table th{
     padding: 8px;
-    text-align: left;
+    text-align: center;
     color:#ffffff;
 }
 
@@ -164,7 +164,7 @@ input:checked + .slider:before {
 .patients-table td{
     padding: 8px;
     border-bottom: #5A8DEE 1px solid;
-    text-align: left;
+    text-align: center;
 }
 
 .patients-table .users-row:hover{

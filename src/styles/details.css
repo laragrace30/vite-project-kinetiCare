@@ -2,11 +2,12 @@
     display: flex;
     gap: 20px;
     height: 90vh;
-    width: 80vw;
+    width: 85vw;
     position: fixed;
     top: 10px;
     left: 220px;
     padding: 20px;
+    overflow: auto;
   }
   
   .details--content {
@@ -16,24 +17,66 @@
     padding: 20px;
     background-color: #eeeeee;
     border-radius: 15px;
-    overflow-y: auto;
+    height: auto; 
+    min-height: 95vh; 
   }
   
   .header {
-    background: #f2f2f2;
+    background-color: #fff;
     height: 60px;
-    width: 100%;
+    width: 95%;
+    position: relative;
+    top: 0;
+    left: 0;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-radius: 15px;
+    display: flex;     
     padding: 0 20px;
+  }
+
+  .header2 {
+    background-color: #fff;
+    height: 35%;
+    width: 96%;
+    position: relative;
+    top: 0;
+    left: 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;     
+    padding: 0 20px;
+    margin-top: 15px;
+  }
+
+  .educationDetails {
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 20px;
+    margin-top: 20px;
+    top: 0;
+    left: 30px;
   }
   
   .personalDetails {
     font-family: 'Roboto';
     font-weight: 500;
     font-size: 20px;
+    margin-top: 15px;
+  }
+
+  .workDetails {
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-left: 420px;
+    top: 0;
+  }
+
+  .therapist{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
   }
   
   .details {
@@ -41,21 +84,34 @@
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    flex-grow: 1; /* Allow this section to grow and take available space */
-    overflow-y: auto; /* Makes the content vertically scrollable */
+    width: 450px;
+    height: 230px;
   }
   
-  .details-header {
+  .details-header--therapist {
     display: flex;
-    gap: 20px;
-    align-items: center;
+    flex-direction: column;
+    gap: 45px;
+    align-items: left;
+  }
+
+  .details-header--therapist1 {
+    display: flex;
+    gap: 40px;
+    align-items: left;
+  }
+
+  .details-header--therapist2 {
+    display: flex;
+    gap: 40px;
+    align-items: left;
   }
   
-  .avatar-section {
+  .avatar-section--therapist {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -65,43 +121,81 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #007bff;
+    background-color: #00bfa6;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     margin-bottom: 10px;
   }
   
-  .details-header p,
-  .details-info p {
+  .details-header--therapist p,
+  .details-info--therapist p, .education--details p{
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
+    font-weight: bold;
     color: #333;
     display: flex;
     flex-direction: column;
-    width: 200px;
     margin: 5px 0;
   }
   
-  .details-header p span,
-  .details-info p span {
+  .details-header--therapist p span,
+  .details-info--therapist p span, .education--details p span{
     font-weight: 500;
     color: #959595;
   }
+
+  .details--work{
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 450px;
+    height: 230px;
+  }
   
-  .details-info {
-    margin-top: 20px;
+  .details-info--therapist {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: left;
+  }
+
+  .details-info--therapist1 {
+    display: flex;
+    flex-direction: row;
+    gap: 47px;
+  }
+
+  .details-info--therapist2 {
+    display: flex;
+    flex-direction: row;
+    gap: 47px;
+  }
+
+  .education--details{
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 250px;
   }
   
   .license-section {
-    margin-top: 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
   }
   
   .license-section a {
@@ -114,18 +208,15 @@
     text-decoration: underline;
   }
   
-  /* Make the buttons outside the scrollable content */
   .buttons {
     display: flex;
-    justify-content: flex-start;
+    flex-direction: row;
     gap: 20px;
-    margin-top: 20px;
-    position: sticky; /* Stick to the bottom of the visible area */
-    bottom: 10px; /* Add spacing from the bottom */
-    z-index: 10; /* Ensure buttons are on top */
-    background-color: #eeeeee; /* Match the container background */
-    padding: 10px; /* Add padding for spacing */
-    border-radius: 15px; /* Make it visually distinct */
+    top: 0;
+    padding: 10px; 
+    border-radius: 15px; 
+    margin-top: 15px;
+    margin-bottom: 25px;
   }
   
   .approve,
@@ -140,33 +231,36 @@
   }
   
   .approve {
+    margin-left: 280px;
     background-color: #00bfa6;
     color: white;
   }
   
   .decline {
+    margin-left: 420px;
     background-color: #ff6347;
     color: white;
   }
   
   .approved {
+    margin-left: 365px;
     background-color: #5a8dee;
     color: white;
   }
 
-  .content {
+  /* .content {
     display: flex;
     flex-direction: column;
-  }
+  } */
   
-  .feedback-container {
+  /* .feedback-container {
     display: flex;
-    justify-content: space-between; /* Makes sure the two sections are side by side */
-    gap: 20px; /* Adds space between the two sections */
+    justify-content: space-between; 
+    gap: 20px; 
   }
   
   .feedback-section {
-    flex: 1; /* Allows both sections to take equal width */
+    flex: 1; 
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -192,5 +286,5 @@
   
   .feedback-card strong {
     font-weight: bold;
-  }
+  } */
   

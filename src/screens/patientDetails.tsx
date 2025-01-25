@@ -61,32 +61,46 @@ function PatientDetails() {
         <div className='container'>
             <SideMenu />
             <div className="details--content">
-                <div className='header'>
+                <div className="header--patient">
                     <h2 className='personalDetails'>Personal Details</h2>
                     <h2 className='emergencyDetails'>Emergency Contact</h2>
                 </div>
-                <div className="details">
+                <div className="details--patient">
                     <div className="details-header">
-                        <div className="avatar-section">
-                            <div className="initials-avatar">
-                                {getInitials(patient.firstName, patient.lastName)}
+                        <div className="details-header1">
+                            <div className="avatar-section">
+                                <div className="initials-avatar">
+                                    {getInitials(patient.firstName, patient.lastName)}
+                                </div>
                             </div>
+                            <p><span>First Name:</span> {patient.firstName}</p>
+                            <p><span>Middle Name:</span> {patient.middleName}</p>
+                            <p><span>Last Name:</span> {patient.lastName}</p>
                         </div>
-                        <p><span>First Name:</span> {patient.firstName}</p>
-                        <p><span>Middle Name:</span> {patient.middleName}</p>
-                        <p><span>Last Name:</span> {patient.lastName}</p>
-                        <p><span>First Name:</span> {patient.contactFirstName}</p>
-                        <p><span>Middle Name:</span> {patient.contactMiddleName}</p>
-                        <p><span>Last Name:</span> {patient.contactLastName}</p>
+                        <div className="details-header2">
+                            <p><span>Gender:</span> {patient.gender}</p>
+                            <p><span>Date of Birth:</span> {patient.birthDate}</p>
+                            <p><span>Email:</span> {patient.email}</p>
+                            <p><span>Contact Number:</span> {patient.phone}</p>
+                        </div>
+                        </div>
+                    <div className="details-emergency">
+                        <div className="details-emergency1">
+                            <p><span>First Name:</span> {patient.contactFirstName}</p>
+                            <p><span>Middle Name:</span> {patient.contactMiddleName}</p>
+                            <p><span>Last Name:</span> {patient.contactLastName}</p>
+                        </div>
+                        <div className="details-emergency2">
+                            <p><span>Relationship:</span> {patient.relationship}</p>
+                            <p><span>Contact Number:</span> {patient.contactPhone}</p>
+                        </div>
                     </div>
-                    <div className="details-info">
-                        <p><span>Gender:</span> {patient.gender}</p>
-                        <p><span>Date of Birth:</span> {patient.birthDate}</p>
-                        <p><span>Email:</span> {patient.email}</p>
-                        <p><span>Contact Number:</span> {patient.phone}</p>
-                        <p><span>Relationship:</span> {patient.relationship}</p>
-                        <p><span>Contact Number:</span> {patient.contactPhone}</p>
-                    </div>
+                </div>
+                <div className="header--patient2">
+                    <h2 className='healthDetails'>Health Concern</h2>
+                </div>
+                <div className="health--details">
+                    <p><span>Brief Description:</span> {patient.briefDescription}</p>
                 </div>
             </div>
         </div>

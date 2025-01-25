@@ -10,20 +10,40 @@
 }
 
 .details--content {
-    background-color: #EEEEEE;
-    flex: 1;
-    border-radius: 15px;
-    padding: 2rem;
     display: flex;
     flex-direction: column;
+    flex: 1;
+    padding: 20px;
+    background-color: #eeeeee;
+    border-radius: 15px;
+    height: auto; 
+    min-height: 95vh; 
 }
 
-.header{
-    background: #F2F2F2;
-    height: 40px;
-    width: 1000px;
+.header--patient{
+    background-color: #fff;
+    height: 60px;
+    width: 95%;
+    position: relative;
+    top: 0;
+    left: 0;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
-    z-index: 10;
+    border-radius: 15px;
+    display: flex;     
+    padding: 0 20px;
+}
+
+.header--patient2{
+    background-color: #fff;
+    height: 60px;
+    width: 60%;
+    position: relative;
+    top: 15px;
+    left: 155px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;     
+    padding: 0 20px;
 }
 
 .personalDetails {
@@ -42,56 +62,130 @@
     display: flex;
     gap: 20px;
     position: absolute;
-    top: 58px;
-    left: 620px;
+    top: 10px;
+    left: 500px;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
 }
 
-.details{
-    background-color: white;
-    width: 1000px;
-    height: 420px;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
-    z-index: 1;
-}
-
-.details-header,
-.details-info {
+.healthDetails {
     display: flex;
-    margin-left: 15px;
-    padding: 10px;
+    gap: 20px;
+    position: relative;
+    top: 10px;
+    left: 220px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
 }
 
-.details-info{
-    margin-left: 20px;
+.details--patient{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 
+.details-header{
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 450px;
+    height: 230px;
+}
 
-.details-header p,
-.details-info p {
+.details-header1{
+    display: flex;
+    gap: 30px;
+    align-items: left;
+}
+
+.details-header2{
+    display: flex;
+    gap: 20px;
+    align-items: left;
+}
+
+.details-emergency{
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 450px;
+    height: 230px;
+}
+
+.details-emergency1{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: left;
+}
+
+.details-emergency2{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: left;
+}
+
+.health--details{
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 25px;
+    margin-left: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 60%;
+    height: 230px;
+    align-items: center;
+}
+
+.health--details p, .health--details p span{
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
+    font-weight: bold;
     color: #333;
     display: flex;
     flex-direction: column;
-    width: 140px;
+    text-align: center;
+}
+
+.health--details p span{
+    font-weight: 500;
+    color: #959595;
+    display: flex;
+}
+
+.details-header p,
+.details-emergency p{
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    flex-direction: column;
     text-align: left
 }
 
 .details-header p span,
-.details-info p span {
+.details-emergency p span{
     font-weight: 500;
     color: #959595;
     display: flex;
-    width: 150px;
     text-align: left;
-}
-
-.details-info {
-    margin-top: 20px;
 }
 
 p {
@@ -103,7 +197,7 @@ p {
     flex-direction: column;
     align-items: left;
     margin-top: 20px;
-    margin-right: 80px;
+    margin-right: 10px;
 }
 
 .initials-avatar {
