@@ -1,55 +1,153 @@
+.details--content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+  background-color: #eeeeee;
+  border-radius: 15px;
+  height: auto; 
+  min-height: 100vh; 
+}
+
+.feedback--header{
+  background-color: #fff;
+    height: 60px;
+    width: 95%;
+    position: relative;
+    top: 0;
+    left: 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: flex;     
+    padding: 0 20px;
+}
+
+.feedback{
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 20px;
+  margin-top: 20px;
+  top: 0;
+  left: 20px;
+}
+
+.patient--feedback{
+  font-family: 'Roboto';
+  font-weight: bold;
+  font-size: 30px;
+  top: 150px;
+  left: 150px;
+}
+
+.therapist--feedback{
+  font-family: 'Roboto';
+  font-weight: bold;
+  font-size: 30px;
+  top: 150px;
+  left: 665px;
+}
+
+.app--feedback{
+  font-family: 'Roboto';
+  font-weight: bold;
+  font-size: 30px;
+  top: 150px;
+  left: 150px;
+}
+
+.patient--feedback,
+.therapist--feedback, .app--feedback {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  padding-bottom: 10px;
+}
+
+.feedback--container1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: auto;
+  min-width: 500px;
+  height: auto;
+}
+
 .feedback-container {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  width: 100%;
+  min-width: 500px;
+  height: 290px;
+  margin-top: 10px;
+  overflow: auto;
+}
+
+  .feedback-container2  {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 100%;
-    height: calc(100% - 60px);
-    overflow: hidden;
+    flex-direction: row;
+    gap: 15px;
+    width: auto;
+    min-width: 500px;
+    height: auto;
+    overflow: auto;
   }
   
-  .feedback-section {
-    flex: 1;
+  .feedback-section--patient-feedback {
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    width: 450px;
+    height: 230px;
+  }
+
+  .feedback-section--therapist-feedback {
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-height: 100%;
-    overflow: hidden;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    height: 230px;
   }
-  
-  .feedback-section h3 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-  }
-  
-  .feedback-content {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 10px;
+
+  .feedback-section--app-feedback {
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    height: 230px;
   }
   
   .feedback-card {
     background-color: #f9f9f9;
-    color: #333;
     padding: 15px;
-    padding-top: 20%;
     margin-bottom: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: left; /* Aligns text to the left */
+    text-align: left; 
     display: flex;
-    flex-direction: column; /* Ensure items stack vertically */
-    align-items: flex-start; /* Align items to the left */
+    flex-direction: column; 
   }
-  
-  .patient-feedback {
-    border-right: 1px solid #ddd;
+
+  .feedback-content{
+    overflow-y: auto;
+  max-height: 200px;
   }
   
   .feedback-card p {
+    top:0;
     margin: 5px 0;
     color: #333;
     font-size: 20px;
@@ -59,3 +157,58 @@
     font-weight: bold;
   }
   
+  .feedback-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .feedback-about {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #666;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #707070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .name-timestamp {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .name {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .timestamp {
+    color: #888;
+    font-size: 0.8em;
+  }
+  
+  .feedback-stars {
+    color: #ffc107;
+    margin-bottom: 10px;
+  }
+  
+  .feedback-text {
+    font-style: italic;
+    color: #333;
+  }
