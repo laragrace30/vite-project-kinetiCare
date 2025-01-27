@@ -18,7 +18,7 @@
     background-color: #eeeeee;
     border-radius: 15px;
     height: auto; 
-    min-height: 95vh; 
+    min-height: 100vh; 
   }
   
   .header {
@@ -36,7 +36,7 @@
 
   .header2 {
     background-color: #fff;
-    height: 35%;
+    height: 70px;
     width: 96%;
     position: relative;
     top: 0;
@@ -52,7 +52,7 @@
     font-family: 'Roboto';
     font-weight: 500;
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
     top: 0;
     left: 30px;
   }
@@ -222,6 +222,7 @@
   .approve,
   .decline,
   .approved {
+    top: 655px;
     border-radius: 10px;
     color: #333;
     font-size: 18px;
@@ -231,13 +232,13 @@
   }
   
   .approve {
-    margin-left: 280px;
+    margin-left: 270px;
     background-color: #00bfa6;
     color: white;
   }
   
   .decline {
-    margin-left: 420px;
+    margin-left: 410px;
     background-color: #ff6347;
     color: white;
   }
