@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'; 
 import './App.css';
 import { logoWOname, bgImage, appName, emailIcon, passwordIcon } from './assets';
@@ -8,8 +8,10 @@ import Reports from './screens/reports';
 import Feedback from './screens/feedback';
 import TherapistDetails from './screens/therapistDetails';
 import PatientDetails from './screens/patientDetails';
+import Controls from './screens/control';
 import { auth } from './firebase/firebase'; 
 import { signInWithEmailAndPassword } from 'firebase/auth';
+
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -92,6 +94,7 @@ function App() {
         <Route path="/patientDetails/:id" element={<PatientDetails />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/control" element={<Controls />} />
       </Routes>
     </Router>
   );
