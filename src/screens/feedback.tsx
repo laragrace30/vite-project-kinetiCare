@@ -78,13 +78,16 @@ function Feedback() {
         ];
   
         for (const userId of uniqueUserIds) {
-          if (userId) {
-            const userDoc = await getDoc(doc(db, "users", userId));
-            if (userDoc.exists()) {
-              userNamesCache[userId] = userDoc.data().firstName || userDoc.data().fullName || userDoc.data().displayName || 'Unknown';
-            }
-          }
-        }
+  if (userId) {
+    const userDoc = await getDoc(doc(db, "users", userId));
+    if (userDoc.exists()) {
+      userNamesCache[userId] = 
+        (userDoc.data().firstName && userDoc.data().lastName 
+          ? `${userDoc.data().firstName} ${userDoc.data().lastName}`
+          : userDoc.data().fullName || userDoc.data().displayName || 'Unknown');
+    }
+  }
+}
   
         setUserNames(userNamesCache);
   
