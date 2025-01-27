@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.7.9",
+    "body-parser": "^1.20.3",
     "chart.js": "^4.4.7",
-    "firebase": "^10.13.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "firebase": "^11.2.0",
+    "geolib": "^3.3.4",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",
@@ -19,8 +24,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@types/firebase": "^3.2.1",
-    "@types/react": "^18.3.3",
+    "@types/geolib": "^2.0.3",
+    "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^9.9.0",
@@ -31,5 +36,19 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"
-  }
+  },
+  "proxy": "http://localhost:5000",
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laragrace30/vite-project-kinetiCare.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laragrace30/vite-project-kinetiCare/issues"
+  },
+  "homepage": "https://github.com/laragrace30/vite-project-kinetiCare#readme"
 }

@@ -14,7 +14,7 @@ interface User {
     email: string;
     specialization?: string;
     accountType: string;
-    briefDescription?: string;
+    injury?: string;
 }
 
 function Users() {
@@ -129,13 +129,14 @@ function Users() {
             <td>{user.firstName} {user.lastName}</td>
             <td>{user.status}</td>
             <td>{user.email}</td>
-            <td>{activeTab === 0 ? user.specialization : user.briefDescription}</td>
+            <td>{activeTab === 0 ? user.specialization : user.injury}</td>
             <td onClick={e => e.stopPropagation()}>
-                <ToggleButton 
-                    isActive={user.status.toLowerCase() === 'active'}
-                    onToggle={(e) => handleToggleStatus(e, user.id, user.status)}
-                    disabled={isUpdating}
-                />
+            <ToggleButton 
+                isActive={user.status.toLowerCase() === 'active'}
+                onToggle={(e: React.ChangeEvent<HTMLInputElement>) => handleToggleStatus(e, user.id, user.status)}
+                disabled={isUpdating}
+            />
+
             </td>
         </tr>
     );

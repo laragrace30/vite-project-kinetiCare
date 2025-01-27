@@ -40,6 +40,10 @@ function SideMenu() {
               <img src={feedback} alt="Feedback Icon" className='icon'/>
               Feedback
             </Link>
+            <Link to="/control" className={`item ${isActive('/control') ? 'active' : ''}`}>
+              <img src={feedback} alt="Admin Control Icon" className='icon'/>
+              Admin Control
+            </Link>
           </div>
           <div className='bottom'>
             {/* <Link to="/settings" className={`item ${isActive('/settings') ? 'active' : ''}`}>
