@@ -22,5 +22,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "index.cjs"]
+  "include": ["src", "index.cjs", "src/firebase/recommendationService.ts"]
 }
