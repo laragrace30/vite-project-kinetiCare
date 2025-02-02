@@ -17,6 +17,23 @@ interface User {
     injury?: string;
 }
 
+const STATUS_MAPPING = {
+    display: {
+        therapist: {
+            Active: 'Approved',
+            Inactive: 'Deactivated'
+        },
+        patient: {
+            Active: 'Active',
+            Inactive: 'Deactivated'
+        }
+    },
+    database: {
+        Approved: 'Active',
+        Deactivated: 'Inactive'
+    }
+};
+
 function Users() {
     const [activeTab, setActiveTab] = useState(0);
     const [therapists, setTherapists] = useState<User[]>([]);
@@ -28,6 +45,17 @@ function Users() {
     });
     const itemsPerPage = 10;
     const navigate = useNavigate();
+
+    const getDisplayStatus = (dbStatus: string): string => {
+        const mappings = activeTab === 0 
+            ? STATUS_MAPPING.display.therapist 
+            : STATUS_MAPPING.display.patient;
+        return mappings[dbStatus as keyof typeof mappings] || dbStatus;
+    };
+    
+    const getDatabaseStatus = (displayStatus: string): string => {
+        return STATUS_MAPPING.database[displayStatus as keyof typeof STATUS_MAPPING.database] || displayStatus;
+    };
 
     useEffect(() => {
         const fetchUsers = async (type: string) => {
@@ -62,18 +90,19 @@ function Users() {
         setIsUpdating(true);
         try {
             const userDoc = doc(db, 'users', id);
-            await updateDoc(userDoc, { status: newStatus });
+            const dbStatus = getDatabaseStatus(newStatus);
+            await updateDoc(userDoc, { status: dbStatus });
             
             if (activeTab === 0) {
                 setTherapists(prev =>
                     prev.map(therapist =>
-                        therapist.id === id ? { ...therapist, status: newStatus } : therapist
+                        therapist.id === id ? { ...therapist, status: dbStatus } : therapist
                     )
                 );
             } else {
                 setPatients(prev =>
                     prev.map(patient =>
-                        patient.id === id ? { ...patient, status: newStatus } : patient
+                        patient.id === id ? { ...patient, status: dbStatus } : patient
                     )
                 );
             }
@@ -88,8 +117,9 @@ function Users() {
         e.preventDefault();
         e.stopPropagation();
         
-        const newStatus = currentStatus.toLowerCase() === 'active' ? 'Inactive' : 'Active';
-        updateUserStatus(id, newStatus);
+        const currentDisplayStatus = getDisplayStatus(currentStatus);
+        const newDisplayStatus = currentDisplayStatus === 'Approved' ? 'Deactivated' : 'Approved';
+        updateUserStatus(id, newDisplayStatus);
     };
 
     const handleRowClick = (e: React.MouseEvent, userId: string) => {
@@ -127,16 +157,15 @@ function Users() {
             className='users-row'
         >
             <td>{user.firstName} {user.lastName}</td>
-            <td>{user.status}</td>
+            <td>{getDisplayStatus(user.status)}</td>
             <td>{user.email}</td>
             <td>{activeTab === 0 ? user.specialization : user.injury}</td>
             <td onClick={e => e.stopPropagation()}>
-            <ToggleButton 
-                isActive={user.status.toLowerCase() === 'active'}
-                onToggle={(e: React.ChangeEvent<HTMLInputElement>) => handleToggleStatus(e, user.id, user.status)}
-                disabled={isUpdating}
-            />
-
+                <ToggleButton 
+                    isActive={user.status.toLowerCase() === 'active'}
+                    onToggle={(e: React.ChangeEvent<HTMLInputElement>) => handleToggleStatus(e, user.id, user.status)}
+                    disabled={isUpdating}
+                />
             </td>
         </tr>
     );
