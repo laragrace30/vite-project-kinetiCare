@@ -237,8 +237,9 @@ button:focus-visible {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  align-items: center;
+  align-items: start;
   width: 100%; 
+  margin-left: 40px;
 }
 
 .card{
@@ -249,9 +250,9 @@ button:focus-visible {
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 20px;
   transition: 0.5s ease-in-out;
   min-width: 250px;
+  height: 150px;
   position: relative;
   top: 10px;
 }
@@ -259,8 +260,9 @@ button:focus-visible {
 .card img {
   display: flex;
   position: relative;
-  bottom: 210px;
+  bottom: 110px;
   left: 100px;
+  margin-top: 15px;
   width: 50px;
   height: 50px;
   color: #ffffff;
@@ -281,12 +283,75 @@ h5{
   font-weight: 600;
 }
 
-p{
+.number{
   color: white;
-  font-size: 30px;
+  font-size: 45px;
   font-weight: 500;
+  margin-top: 70px;
+  display: flex;
+  position: absolute;
 }
 
+.pending-therapists-section {
+  margin-top: 90px;
+  margin-left: 60px;
+  padding: 0 1rem;
+}
+
+.table-container {
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pending-therapists-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.table-row {
+  border-bottom: 1px solid #eee;
+}
+
+.table-row td {
+  padding: 1rem;
+}
+
+.therapist-name {
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.therapist-specialization {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.status-column {
+  text-align: right;
+}
+
+.status {
+  color: #f59e0b;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.pending {
+  top: 270px;
+  left: 80px;
+  font-family: 'Roboto';
+  font-size: 25px;
+  font-weight: 500;
+}
 
 
 

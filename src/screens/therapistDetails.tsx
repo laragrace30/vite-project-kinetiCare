@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { db } from "../firebase/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { sendEmail } from "../utils/sendEmail";
 import "../styles/details.css";
 import SideMenu from "../components/sideMenu";
 
@@ -29,11 +30,14 @@ interface Therapist {
 function TherapistDetails() {
   const { id } = useParams<{ id: string }>();
   const [therapist, setTherapist] = useState<Therapist | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTherapist = async () => {
       if (!id) {
-        console.error("No therapist ID provided");
+        setError("No therapist ID provided");
+        setIsLoading(false);
         return;
       }
 
@@ -54,13 +58,15 @@ function TherapistDetails() {
 
             setTherapist(data as Therapist);
           } else {
-            console.error("This user is not a therapist.");
+            setError("This user is not a therapist.");
           }
         } else {
-          console.log("No such document!");
+          setError("No such therapist found!");
         }
       } catch (error) {
-        console.error("Error fetching therapist details:", error);
+        setError("Error fetching therapist details: " + (error as Error).message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -69,91 +75,157 @@ function TherapistDetails() {
 
   const handleApprove = async () => {
     try {
-      if (id) {
-        const docRef = doc(db, "users", id);
-        await updateDoc(docRef, { status: "Active" });
-        setTherapist((prev) => (prev ? { ...prev, status: "Active" } : prev));
+      if (!therapist || !id) {
+        setError("Missing therapist information");
+        return;
       }
+  
+      // First update the status in Firebase
+      const therapistRef = doc(db, "users", id);
+      await updateDoc(therapistRef, {
+        status: "Active"
+      });
+  
+      // Then send the email
+      await sendEmail({
+        to: therapist.email,
+        subject: "Your Therapist Application Has Been Approved",
+        text: `Dear ${therapist.firstName} ${therapist.lastName},\n\nWe are pleased to inform you that your application to join KinetiCare has been approved. You can now log in to your account and start using our services.`,
+        html: `
+          <h2>Application Approved</h2>
+          <p>Dear ${therapist.firstName} ${therapist.lastName},</p>
+          <p>We are pleased to inform you that your application to join KinetiCare has been approved.</p>
+          <p>You can now log in to your account and start using our services.</p>
+          <br>
+        `
+      });
+  
+      // Update local state
+      setTherapist(prev => prev ? { ...prev, status: "Active" } : prev);
+      console.log("✅ Approval email sent and status updated successfully!");
+  
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error("❌ Error in approval process:", error);
+      setError(`Error in approval process: ${(error as Error).message}`);
     }
   };
-
-  if (!therapist) return <div>Loading...</div>;
+  
+  const handleDecline = async () => {
+    try {
+      if (!therapist || !id) {
+        setError("Missing therapist information");
+        return;
+      }
+  
+      // First update the status in Firebase
+      const therapistRef = doc(db, "users", id);
+      await updateDoc(therapistRef, {
+        status: "Declined"
+      });
+  
+      // Then send the email
+      await sendEmail({
+        to: therapist.email,
+        subject: "Update on Your Therapist Application",
+        text: `Dear ${therapist.firstName} ${therapist.lastName},\n\nWe regret to inform you that your application has not been approved. If you would like to apply again, please review our requirements and resubmit your application.`,
+        html: `
+          <h2>Application Status Update</h2>
+          <p>Dear ${therapist.firstName} ${therapist.lastName},</p>
+          <p>We regret to inform you that your application has not been approved.</p>
+          <p>If you would like to apply again, please review our requirements and resubmit your application.</p>
+          <br>
+        `
+      });
+  
+      // Update local state
+      setTherapist(prev => prev ? { ...prev, status: "Declined" } : prev);
+      console.log("✅ Decline email sent and status updated successfully!");
+  
+    } catch (error) {
+      console.error("❌ Error in decline process:", error);
+      setError(`Error in decline process: ${(error as Error).message}`);
+    }
+  };
 
   const getInitials = (firstName: string, lastName: string) =>
     `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!therapist) return <div>No therapist data found</div>;
+
   return (
     <div className="container">
       <SideMenu />
-    <div className="details--content">
-    <div className="header">
-      <h2 className="personalDetails">Personal Details</h2>
-      <h2 className="workDetails">Professional Details</h2>
+      <div className="details--content">
+        <div className="header">
+          <h2 className="personalDetails">Personal Details</h2>
+          <h2 className="workDetails">Professional Details</h2>
+        </div>
+        <div className="therapist">
+          <div className="details">
+            <div className="details-header--therapist">
+              <div className="details-header--therapist1">
+                <div className="avatar-section--therapist">
+                  <div className="initials-avatar">
+                    {getInitials(therapist.firstName, therapist.lastName)}
+                  </div>
+                </div>
+                <p><span>First Name:</span> {therapist.firstName}</p>
+                <p><span>Middle Name:</span> {therapist.middleName}</p>
+                <p><span>Last Name:</span> {therapist.lastName}</p>
+              </div>
+              <div className="details-header--therapist2">
+                <p><span>Gender:</span> {therapist.gender}</p>
+                <p><span>Birth Date:</span> {therapist.birthDate}</p>
+                <p><span>Phone:</span> {therapist.phone}</p>
+                <p><span>Email:</span> {therapist.email}</p>
+              </div>
+            </div>
+          </div>
+          <div className="details--work">
+            <div className="details-info--therapist">
+              <div className="details-info--therapist1">
+                <p><span>Specialization:</span> {therapist.specialization}</p>
+                <p><span>Experience:</span> {therapist.experience}</p>
+                <p><span>Clinic/Hospital:</span> {therapist.clinic}</p>
+              </div>
+              <div className="details-info--therapist2">
+                <p><span>Clinic Address:</span> {therapist.clinicAddress}</p>
+                <p><span>Clinic/Hospital Contact:</span> {therapist.clinicContact}</p>
+                <p><span>License Number:</span> {therapist.licenseNumber}</p>
+              </div>
+              {therapist.licenseFilePath && (
+                <div className="license-section">
+                  <a href={therapist.licenseFilePath} target="_blank" rel="noopener noreferrer">
+                    View License
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="header2">
+          <h2 className="educationDetails">Educational Details</h2>
+        </div>
+        <div className="education--details">
+          <p><span>Degree:</span> {therapist.degrees}</p>
+          <p><span>Consultation Fee:</span> {therapist.fee}</p>
+        </div>
+        <div className="buttons">
+          {therapist.status === "Active" ? (
+            <button className="approved">Approved</button>
+          ) : therapist.status === "Declined" ? (
+            <button className="declined">Declined</button>
+          ) : (
+            <>
+              <button className="approve" onClick={handleApprove}>Approve</button>
+              <button className="decline" onClick={handleDecline}>Decline</button>
+            </>
+          )}
+        </div>
+      </div>
     </div>
-    <div className="therapist">
-      <div className="details">
-        <div className="details-header--therapist">
-          <div className="details-header--therapist1">
-            <div className="avatar-section--therapist">
-              <div className="initials-avatar">
-                {getInitials(therapist.firstName, therapist.lastName)}
-              </div>
-            </div>
-            <p><span>First Name:</span> {therapist.firstName}</p>
-            <p><span>Middle Name:</span> {therapist.middleName}</p>
-            <p><span>Last Name:</span> {therapist.lastName}</p>
-          </div>
-          <div className="details-header--therapist2">
-            <p><span>Gender:</span> {therapist.gender}</p>
-            <p><span>Birth Date:</span> {therapist.birthDate}</p>
-            <p><span>Phone:</span> {therapist.phone}</p>
-            <p><span>Email:</span> {therapist.email}</p>
-          </div>
-        </div>
-      </div>
-      <div className="details--work">
-          <div className="details-info--therapist">
-            <div className="details-info--therapist1">
-              <p><span>Specialization:</span> {therapist.specialization}</p>
-              <p><span>Experience:</span> {therapist.experience}</p>
-              <p><span>Clinic/Hospital:</span> {therapist.clinic}</p>
-            </div>
-            <div className="details-info--therapist2">
-              <p><span>Clinic Address:</span>{therapist.clinicAddress}</p>
-              <p><span>Clinic/Hospital Contact:</span> {therapist.clinicContact}</p>
-              <p><span>License Number:</span> {therapist.licenseNumber}</p>
-            </div>
-            {therapist.licenseFilePath && (
-              <div className="license-section">
-                <a href={therapist.licenseFilePath} target="_blank" rel="noopener noreferrer">
-                  View License
-                </a>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="header2">
-      <h2 className="educationDetails">Educational Details</h2>
-      </div>
-      <div className="education--details">
-        <p><span>Degree:</span> {therapist.degrees}</p>
-        <p><span>Consultation Fee:</span> {therapist.fee}</p>
-      </div>
-      <div className="buttons">
-        {therapist.status !== "Active" ? (
-          <>
-            <button className="approve" onClick={handleApprove}>Approve</button>
-            <button className="decline">Decline</button>
-          </>
-        ) : (
-          <button className="approved">Approved</button>
-        )}
-      </div>
-  </div>
-</div>
   );
 }
 
