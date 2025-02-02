@@ -220,8 +220,7 @@
   }
   
   .approve,
-  .decline,
-  .approved {
+  .decline {
     top: 655px;
     border-radius: 10px;
     color: #333;
@@ -244,9 +243,36 @@
   }
   
   .approved {
-    margin-left: 365px;
+    margin-left: 230px;
+    top: 650px;
     background-color: #5a8dee;
     color: white;
+  }
+
+  .declined {
+    margin-left: 235px;
+    top: 650px;
+    background-color: #ff6347;
+    color: white;
+  }
+
+
+  .error-container, .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    padding: 2rem;
+  }
+  
+  .error-message {
+    color: #f44336;
+    font-weight: 500;
+  }
+  
+  .loading-message {
+    color: #666;
+    font-weight: 500;
   }
 
   /* .content {
