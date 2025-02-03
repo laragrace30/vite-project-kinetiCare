@@ -253,12 +253,20 @@ function Feedback() {
       <div className="details--content">
         <div className="feedback--header">
           <h2 className="feedback">Overall Feedback</h2>
-          <button 
-            className="toggle-archive-btn"
-            onClick={() => setShowArchive(!showArchive)}
-          >
-            {showArchive ? 'Show Unread' : 'Show Archive'}
-          </button>
+          <div className="feedback-buttons">
+            <button 
+              className={`archive-btn ${!showArchive ? 'active' : ''}`}
+              onClick={() => setShowArchive(false)}
+            >
+              Unread
+            </button>
+            <button 
+              className={`feedback-btn ${showArchive ? 'active' : ''}`}
+              onClick={() => setShowArchive(true)}
+            >
+              Archive
+            </button>
+          </div>
         </div>
         <div className="feedback--container1">
           <div className="feedback-container">
