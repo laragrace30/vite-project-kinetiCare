@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import SideMenu from '../components/sideMenu';
 import '../styles/control.css';
 import { db } from '../firebase/firebase';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
 import { recommendationService } from '../firebase/recommendationService';
 
 interface Weights {
   specialization: number;
   location: number;
   fee: number;
+  experience: number;
+  therapistRating: number;
 }
 
 interface CommissionRate {
@@ -17,19 +19,25 @@ interface CommissionRate {
 
 function Controls() {
   const [weights, setWeights] = useState<Weights>({
-    specialization: 60,
+    specialization: 50,
     location: 20,
-    fee: 20,
+    fee: 10,
+    experience: 10,
+    therapistRating: 10,
   });
   const [inputValues, setInputValues] = useState({
-    specialization: '60',
+    specialization: '50',
     location: '20',
-    fee: '20',
+    fee: '10',
+    experience: '10',
+    therapistRating: '10',
   });
-  
+
   const [platformFee, setPlatformFee] = useState<number>(20);
   const [platformFeeInput, setPlatformFeeInput] = useState('20');
 
+  const [specializations, setSpecializations] = useState<string[]>([]);
+  const [newSpecialization, setNewSpecialization] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [commissionError, setCommissionError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +55,8 @@ function Controls() {
             specialization: data.specialization.toString(),
             location: data.location.toString(),
             fee: data.fee.toString(),
+            experience: data.experience.toString(),
+            therapistRating: data.therapistRating.toString(),
           });
         }
 
@@ -57,6 +67,11 @@ function Controls() {
           setPlatformFee(data.platformFee);
           setPlatformFeeInput(data.platformFee.toString());
         }
+
+        // Fetch specializations
+        const specializationsSnapshot = await getDocs(collection(db, 'specializations'));
+        const specializationList = specializationsSnapshot.docs.map(doc => doc.data().name);
+        setSpecializations(specializationList);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Failed to load data. Please try again later.');
@@ -70,13 +85,13 @@ function Controls() {
     if (value === '' || (!isNaN(Number(value)) && Number(value) >= 0 && Number(value) <= 100)) {
       setInputValues(prev => ({
         ...prev,
-        [type]: value
+        [type]: value,
       }));
 
       if (value !== '') {
         setWeights(prev => ({
           ...prev,
-          [type]: Number(value)
+          [type]: Number(value),
         }));
       }
       setError(null);
@@ -90,6 +105,30 @@ function Controls() {
         setPlatformFee(Number(value));
       }
       setCommissionError(null);
+    }
+  };
+
+  const handleNewSpecializationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewSpecialization(e.target.value);
+  };
+
+  const addSpecialization = async () => {
+    if (!newSpecialization) {
+      setError('Specialization name cannot be empty');
+      return;
+    }
+
+    try {
+      // Add new specialization to Firebase
+      await addDoc(collection(db, 'specializations'), {
+        name: newSpecialization,
+      });
+      setSpecializations(prev => [...prev, newSpecialization]);
+      setNewSpecialization('');
+      setError(null);
+    } catch (err) {
+      console.error('Error adding specialization:', err);
+      setError('Failed to add specialization');
     }
   };
 
@@ -165,7 +204,6 @@ function Controls() {
               <div className="controls-content">
                 <div className="weights-card">
                   {error && <div className="error-message">{error}</div>}
-
                   <div className="weight-input-group">
                     <label>Specialization Weight (%)</label>
                     <input
@@ -199,6 +237,28 @@ function Controls() {
                     />
                   </div>
 
+                  <div className="weight-input-group">
+                    <label>Experience Weight (%)</label>
+                    <input
+                      type="number"
+                      value={inputValues.experience}
+                      onChange={(e) => handleWeightChange('experience', e.target.value)}
+                      min="0"
+                      max="100"
+                    />
+                  </div>
+
+                  <div className="weight-input-group">
+                    <label>Therapist Rating Weight (%)</label>
+                    <input
+                      type="number"
+                      value={inputValues.therapistRating}
+                      onChange={(e) => handleWeightChange('therapistRating', e.target.value)}
+                      min="0"
+                      max="100"
+                    />
+                  </div>
+
                   <div className="weight-total">
                     <p>
                       Total: {hasEmptyFields ? '-' : total.toFixed(1)}%{' '}
@@ -207,7 +267,7 @@ function Controls() {
                       )}
                     </p>
                   </div>
-
+                  
                   <button
                     onClick={saveWeights}
                     disabled={isLoading || hasEmptyFields || !isValid}
@@ -219,7 +279,40 @@ function Controls() {
               </div>
             </div>
           </div>
+
           <div className="controls-container2">
+            <div className="controls-section--specializations">
+              <h3 className="specializations--feedback">Manage Specializations</h3>
+              <div className="controls-content">
+                <div className="specialization-card">
+                  <div className="specialization-input-group">
+                    <label>Add New Specialization</label>
+                    <input
+                      type="text"
+                      value={newSpecialization}
+                      onChange={handleNewSpecializationChange}
+                    />
+                  </div>
+
+                  <button
+                    onClick={addSpecialization}
+                    className="add-specialization-button"
+                  >
+                    Add Specialization
+                  </button>
+
+                  <div className="specialization-list">
+                    <h4>Current Specializations</h4>
+                    <ul>
+                      {specializations.map((specializations, index) => (
+                        <li key={index}>{specializations}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="controls-section--commission">
               <h3 className="commission--feedback">Commission Fee Configuration</h3>
               <div className="controls-content">

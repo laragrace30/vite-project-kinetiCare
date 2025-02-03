@@ -1,4 +1,4 @@
-import { db } from './firebase';
+import { db } from '../firebase/firebase';
 import {
   collection,
   doc,
@@ -25,10 +25,9 @@ interface TherapistData {
   specialization: string;
   clinicAddress: string;
   fee: number;
-  experience: string;
-  averageRating: number;
+  licenseDate: Timestamp;  // Add the license date
   status: string;
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | Timestamp;
 }
 
 export class RecommendationService {
@@ -36,10 +35,14 @@ export class RecommendationService {
     specialization: number;
     location: number;
     fee: number;
+    experience: number; // Add experience to weights
+    therapistRating: number; // Add rating to weights
   } = {
     specialization: 60,
     location: 20,
     fee: 20,
+    experience: 10,
+    therapistRating: 10,
   };
 
   constructor() {
@@ -58,18 +61,47 @@ export class RecommendationService {
       if (
         weightsData.specialization !== undefined &&
         weightsData.location !== undefined &&
-        weightsData.fee !== undefined
+        weightsData.fee !== undefined &&
+        weightsData.experience !== undefined &&
+        weightsData.therapistRating !== undefined
       ) {
         this.weights = weightsData as typeof this.weights;
       }
     }
   }
 
+  private calculateExperienceYears(licenseDate: Timestamp | Date): number {
+    const currentDate = new Date();
+    const startDate = licenseDate instanceof Timestamp ? licenseDate.toDate() : new Date(licenseDate);
+    const diffTime = currentDate.getTime() - startDate.getTime();
+    const diffYears = diffTime / (1000 * 3600 * 24 * 365);
+    return Math.floor(diffYears); // Round down to whole years
+  }
+
+  private async calculateAverageRating(therapistId: string): Promise<number> {
+    const ratingsRef = collection(db, 'therapistRatings');
+    const ratingsQuery = query(
+      ratingsRef,
+      where('therapistId', '==', therapistId),
+      where('isArchived', '==', false)
+    );
+    const querySnapshot = await getDocs(ratingsQuery);
+    const ratings = querySnapshot.docs.map((doc) => doc.data() as { rating: number });
+
+    if (ratings.length === 0) return 0; // Return 0 if no ratings
+
+    const sumRatings = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+    return sumRatings / ratings.length; // Average rating
+  }
+
   private async calculateRecommendations(
     request: RecommendationRequest,
     therapists: TherapistData[]
   ) {
-    const recommendations = therapists.map((therapist) => {
+    const recommendations = await Promise.all(therapists.map(async (therapist) => {
+      const experienceYears = this.calculateExperienceYears(therapist.licenseDate); // Get experience in years
+      const averageRating = await this.calculateAverageRating(therapist.id); // Get therapist rating
+
       const specializationScore =
         therapist.specialization?.toLowerCase() === request.injury.toLowerCase() ? 1 : 0;
 
@@ -80,10 +112,15 @@ export class RecommendationService {
       const feeScore =
         fee >= request.priceRangeStart && fee <= request.priceRangeEnd ? 1 : 0;
 
+      const experienceScore = experienceYears / 10; // Normalize experience to scale
+      const ratingScore = averageRating / 5; // Normalize rating to scale
+
       const totalScore =
         (specializationScore * this.weights.specialization) / 100 +
         (locationScore * this.weights.location) / 100 +
-        (feeScore * this.weights.fee) / 100;
+        (feeScore * this.weights.fee) / 100 +
+        (experienceScore * this.weights.experience) / 100 +
+        (ratingScore * this.weights.therapistRating) / 100;
 
       return {
         therapistId: therapist.id,
@@ -95,7 +132,7 @@ export class RecommendationService {
           fee: feeScore === 1,
         },
       };
-    });
+    }));
 
     return recommendations.sort((a, b) => b.score - a.score);
   }

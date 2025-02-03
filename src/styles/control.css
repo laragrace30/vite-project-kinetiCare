@@ -151,7 +151,9 @@
 
 .weight-input-group {
   margin-bottom: 16px;
+  width: 100%; /* Allow it to expand with the content */
 }
+
 
 .weight-input-group label {
   display: block;
@@ -202,7 +204,7 @@
 .save-button {
   width: 460px;
   padding: 12px;
-  margin-top: 50px;
+  margin-top: 100px; /* Adjust this value to lower the button */
   left: 60px;
   background-color: #3b82f6;
   color: white;

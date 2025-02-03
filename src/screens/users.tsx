@@ -4,7 +4,8 @@ import ToggleButton from '../components/toggleButton';
 import { useNavigate } from 'react-router-dom';
 import '../styles/users.css';
 import { db } from '../firebase/firebase';
-import { collection, query, where, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, query, where, doc, getDocs, updateDoc} from 'firebase/firestore';
+import { useCallback } from 'react';
 
 interface User {
     id: string;
@@ -20,17 +21,20 @@ interface User {
 const STATUS_MAPPING = {
     display: {
         therapist: {
-            Active: 'Approved',
-            Inactive: 'Deactivated'
+            Pending: 'Pending Approval', 
+            Active: 'Approved',          
+            Inactive: 'Inactive'         
         },
         patient: {
             Active: 'Active',
-            Inactive: 'Deactivated'
+            Inactive: 'Inactive'
         }
     },
     database: {
+        'Pending Approval': 'Pending', // Convert back to DB format
         Approved: 'Active',
-        Deactivated: 'Inactive'
+        Inactive: 'Inactive',
+        Active: 'Active'
     }
 };
 
@@ -43,6 +47,17 @@ function Users() {
         therapists: 1,
         patients: 1
     });
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [statusFilter, setStatusFilter] = useState('');
+    // const [statusOptions, setStatusOptions] = useState<string[]>([]);
+    const [specializationFilter, setSpecializationFilter] = useState('');
+    // const [specializations, setSpecializations] = useState<Array<{ id: string; name: string }>>([]);
+    const [healthConditionFilter, setHealthConditionFilter] = useState('');
+    const [injuryOptions, setInjuryOptions] = useState<string[]>([]);
+    const [specializationOptions, setSpecializationOptions] = useState<string[]>([]);
+    const [ptStatusOptions, setPTStatusOptions] = useState<string[]>([]);
+    const [patientStatusOptions, setPatientStatusOptions] = useState<string[]>([]);
+
     const itemsPerPage = 10;
     const navigate = useNavigate();
 
@@ -52,10 +67,125 @@ function Users() {
             : STATUS_MAPPING.display.patient;
         return mappings[dbStatus as keyof typeof mappings] || dbStatus;
     };
-    
-    const getDatabaseStatus = (displayStatus: string): string => {
+    // const getDatabaseStatus = useCallback((displayStatus: string): string => {
+    //     if (activeTab === 0) {
+    //         return STATUS_MAPPING.database[displayStatus as keyof typeof STATUS_MAPPING.database] || displayStatus;
+    //     }
+    //     return displayStatus === 'Active' ? 'Active' : 'Inactive';
+    // }, [activeTab]);
+
+    const getDatabaseStatus = useCallback((displayStatus: string): string => {
         return STATUS_MAPPING.database[displayStatus as keyof typeof STATUS_MAPPING.database] || displayStatus;
-    };
+    }, []);    
+
+    // useEffect(() => {
+    //     const fetchStatusOptions = async () => {
+    //         try {
+    //             const usersRef = collection(db, 'users');
+    //             const snapshot = await getDocs(usersRef);
+    //             const statuses = new Set<string>();
+
+    //             snapshot.forEach(doc => {
+    //                 const userData = doc.data();
+    //                 if (userData.status) {
+    //                     statuses.add(userData.status);
+    //                 }
+    //             });
+
+    //             setStatusOptions(Array.from(statuses));
+    //         } catch (error) {
+    //             console.error("Error fetching status options: ", error);
+    //         }
+    //     };
+
+    //     fetchStatusOptions();
+    // }, []);
+
+    useEffect(() => {
+        const fetchPTStatus = async () => {
+            try {
+                const q = query(collection(db, "users"), where("accountType", "==", "therapist"));
+                const querySnapshot = await getDocs(q);
+                const fetchedPTStatus = querySnapshot.docs.map(doc => doc.data().status).filter(Boolean);
+                const uniquePTStatus = Array.from(new Set(fetchedPTStatus));
+                setPTStatusOptions(uniquePTStatus);
+            } catch (error) {
+                console.error("Error fetching status options:", error);
+            }
+        };
+        
+        if (activeTab === 1) {
+            fetchPTStatus();
+        }
+    }, [activeTab]);
+
+    useEffect(() => {
+        const fetchPatientStatus = async () => {
+            try {
+                const q = query(collection(db, "users"), where("accountType", "==", "patient"));
+                const querySnapshot = await getDocs(q);
+                const fetchedPatientStatus = querySnapshot.docs.map(doc => doc.data().status).filter(Boolean);
+                const uniquePatientStatus = Array.from(new Set(fetchedPatientStatus));
+                setPatientStatusOptions(uniquePatientStatus);
+            } catch (error) {
+                console.error("Error fetching status options:", error);
+            }
+        };
+        
+        if (activeTab === 1) {
+            fetchPatientStatus();
+        }
+    }, [activeTab]);
+
+    useEffect(() => {
+        const fetchSpecializations = async () => {
+            try {
+                const q = query(collection(db, "users"), where("accountType", "==", "therapist"));
+                const querySnapshot = await getDocs(q);
+                const fetchedSpecializations = querySnapshot.docs.map(doc => doc.data().specialization).filter(Boolean);
+                const uniqueSpecializations = Array.from(new Set(fetchedSpecializations));
+                setSpecializationOptions(uniqueSpecializations);
+            } catch (error) {
+                console.error('Error fetching specializations:', error);
+            }
+        };
+        fetchSpecializations();
+    }, []);
+
+    // useEffect(() => {
+    //     const fetchSpecializations = async () => {
+    //         try {
+    //             const specializationsQuery = await getDocs(collection(db, 'specializations'));
+    //             const fetchedSpecializations = specializationsQuery.docs.map(doc => ({
+    //                 id: doc.id,
+    //                 name: doc.data().name
+    //             }));
+    //             setSpecializations(fetchedSpecializations);
+    //         } catch (error) {
+    //             console.error('Error fetching specializations:', error);
+    //         }
+    //     };
+    //     fetchSpecializations();
+    // }, []);
+
+
+    useEffect(() => {
+        const fetchInjuryOptions = async () => {
+            try {
+                const q = query(collection(db, "users"), where("accountType", "==", "patient"));
+                const querySnapshot = await getDocs(q);
+                const injuries = querySnapshot.docs.map(doc => doc.data().injury).filter(Boolean);
+                const uniqueInjuries = Array.from(new Set(injuries));
+                setInjuryOptions(uniqueInjuries);
+            } catch (error) {
+                console.error("Error fetching injury options:", error);
+            }
+        };
+        
+        if (activeTab === 1) {
+            fetchInjuryOptions();
+        }
+    }, [activeTab]);
 
     useEffect(() => {
         const fetchUsers = async (type: string) => {
@@ -66,23 +196,48 @@ function Users() {
                     id: doc.id,
                     ...doc.data()
                 })) as User[];
-
+        
+                // const filteredUsers = usersData.filter(user => {
+                //     const nameMatch = `${user.firstName} ${user.lastName}`
+                //         .toLowerCase()
+                //         .includes(searchQuery.toLowerCase());
+        
+                //     const statusMatch = !statusFilter || user.status === getDatabaseStatus(statusFilter);
+                //     const specializationMatch = activeTab === 0 ? !specializationFilter || user.specialization === specializationFilter : true;
+                //     const healthConditionMatch = activeTab === 1 ? !healthConditionFilter || user.injury === healthConditionFilter : true;
+        
+                //     return nameMatch && statusMatch && specializationMatch && healthConditionMatch;
+                // });
+                const filteredUsers = usersData.filter(user => {
+                    const nameMatch = `${user.firstName} ${user.lastName}`
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase());
+                
+                    const statusMatch = !statusFilter || user.status === getDatabaseStatus(statusFilter);
+                    const specializationMatch = activeTab === 0 ? !specializationFilter || user.specialization === specializationFilter : true;
+                    const healthConditionMatch = activeTab === 1 ? !healthConditionFilter || user.injury === healthConditionFilter : true;
+                
+                    return nameMatch && statusMatch && specializationMatch && healthConditionMatch;
+                });
+                
+        
                 if (type === "therapist") {
-                    setTherapists(usersData);
+                    setTherapists(filteredUsers);
                 } else {
-                    setPatients(usersData);
+                    setPatients(filteredUsers);
                 }
             } catch (error) {
                 console.error(`Error fetching ${type}s:`, error);
             }
         };
-
+    
         if (activeTab === 0) {
             fetchUsers("therapist");
         } else if (activeTab === 1) {
             fetchUsers("patient");
         }
-    }, [activeTab]);
+    }, [activeTab, searchQuery, statusFilter, specializationFilter, healthConditionFilter, getDatabaseStatus]);
+    
 
     const updateUserStatus = async (id: string, newStatus: string) => {
         if (isUpdating) return;
@@ -113,14 +268,33 @@ function Users() {
         }
     };
 
+    // const handleToggleStatus = (e: React.ChangeEvent<HTMLInputElement>, id: string, currentStatus: string) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+        
+    //     const currentDisplayStatus = getDisplayStatus(currentStatus);
+    //     const newDisplayStatus = currentDisplayStatus === 'Approved' ? 'Deactivated' : 'Approved';
+    //     updateUserStatus(id, newDisplayStatus);
+    // };
     const handleToggleStatus = (e: React.ChangeEvent<HTMLInputElement>, id: string, currentStatus: string) => {
         e.preventDefault();
         e.stopPropagation();
         
-        const currentDisplayStatus = getDisplayStatus(currentStatus);
-        const newDisplayStatus = currentDisplayStatus === 'Approved' ? 'Deactivated' : 'Approved';
-        updateUserStatus(id, newDisplayStatus);
+        const currentDisplayStatus = STATUS_MAPPING.display.therapist[currentStatus as keyof typeof STATUS_MAPPING.display.therapist] || currentStatus;
+    
+        let newDisplayStatus: keyof typeof STATUS_MAPPING.database;
+        if (currentDisplayStatus === 'Pending Approval') {
+            newDisplayStatus = 'Approved'; // Approve PT
+        } else if (currentDisplayStatus === 'Approved') {
+            newDisplayStatus = 'Inactive'; // Deactivate PT
+        } else {
+            newDisplayStatus = 'Approved'; // Reactivate PT
+        }
+    
+        updateUserStatus(id, STATUS_MAPPING.database[newDisplayStatus]);
     };
+    
+    
 
     const handleRowClick = (e: React.MouseEvent, userId: string) => {
         const target = e.target as HTMLElement;
@@ -174,6 +348,54 @@ function Users() {
         <div className="container">
             <SideMenu />
             <div className="users">
+            <div className="filters">
+            <input
+                type="text"
+                placeholder="Search by name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {activeTab === 0 ? (
+             <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
+                <option value="">Filter by status</option>
+                {ptStatusOptions.map((status, index) => (
+                    <option key={index} value={status}>
+                        {status}
+                    </option>
+                ))}
+            </select>
+            ) : (
+                <select onChange={(e) => setStatusFilter(e.target.value)} value={healthConditionFilter}>
+                <option value="">Filter by status</option>
+                {patientStatusOptions.map((status, index) => (
+                    <option key={index} value={status}>
+                        {status}
+                    </option>
+                ))}
+            </select>
+            )}
+
+            {activeTab === 0 ? (
+                <select onChange={(e) => setSpecializationFilter(e.target.value)} value={specializationFilter}>
+                    <option value="">Filter by specialization</option>
+                    {specializationOptions.map((specialization, index) => (
+                        <option key={index} value={specialization}>
+                            {specialization}
+                        </option>
+                    ))}
+                </select>
+            ) : (
+                <select onChange={(e) => setHealthConditionFilter(e.target.value)} value={healthConditionFilter}>
+                    <option value="">Filter by health condition</option>
+                    {injuryOptions.map((injury, index) => (
+                        <option key={index} value={injury}>
+                            {injury}
+                        </option>
+                    ))}
+                </select>
+            )} 
+        </div>
+
                 <div className="tabs-container">
                     <div
                         className={`tabs ${activeTab === 0 ? 'activePT-tabs' : ''}`}
