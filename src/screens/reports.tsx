@@ -3,6 +3,7 @@ import { db } from "../firebase/firebase";
 import { collection, getDocs, query, where, Timestamp } from "firebase/firestore";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line, Bar } from "react-chartjs-2";
+import { TrendingUp, CreditCard, HandCoins } from 'lucide-react';
 import "../styles/report.css";
 import SideMenu from "../components/sideMenu";
 
@@ -17,6 +18,63 @@ ChartJS.register(
   Legend
 );
 
+const SummaryStats = ({ 
+  totalTransactions = 0,
+  totalRevenue = 0,
+  revenueGrowth = 0
+}) => {
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP'
+    }).format(value);
+  };
+
+  return (
+    <div className="summary-container">
+      <div className="summary-transactions">
+        <div className="summary-trans">
+          <div className="summary-span">
+            <span className="summary-text-trans">Total Transactions</span>
+            <span className="summary-value-trans">{totalTransactions}</span>
+          </div>
+          <div className="icon-trans">
+            <CreditCard/>
+          </div>
+        </div>
+      </div>
+
+      {/* Total Revenue Card */}
+      <div className="summary-revenue">
+        <div className="summary-rev">
+          <div className="summary-span">
+            <span className="summary-text-rev">Total Commission</span>
+            <span className="summary-value-rev">{formatCurrency(totalRevenue)}</span>
+          </div>
+          <div className="icon-coins">
+            <HandCoins/>
+          </div>
+        </div>
+      </div>
+
+      {/* Revenue Growth Card */}
+      <div className="summary-revenue-growth">
+        <div className="summary-revgrowth">
+          <div className="summary-span">
+            <span className="summary-text-revgrowth">Revenue Growth</span>
+            <span className={`text-2xl font-bold ${revenueGrowth >= 0 ? 'value-green' : 'value-red'}`}>
+              {revenueGrowth >= 0 ? '+' : ''}{revenueGrowth}%
+            </span>
+          </div>
+          <div className="icon-trending">
+            <TrendingUp/>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function Reports() {
   const [selectedCommissionMonth, setSelectedCommissionMonth] = useState<string>(new Date().toLocaleString("default", { month: "long", year: "numeric" }));
   const [selectedUsersMonth, setSelectedUsersMonth] = useState<string>(new Date().toLocaleString("default", { month: "long", year: "numeric" }));
@@ -28,13 +86,102 @@ function Reports() {
   const [loginLabels, setLoginLabels] = useState<string[]>([]);
   
   const [totalCommission, setTotalCommission] = useState(0);
+  const [allTimeRevenue, setAllTimeRevenue] = useState(0);
+  const [allTimeTransactions, setAllTimeTransactions] = useState(0);
+  const [monthlyTransactions, setMonthlyTransactions] = useState(0);
   const [totalNewUsers, setTotalNewUsers] = useState(0);
   const [totalLogins, setTotalLogins] = useState(0);
+  const [revenueGrowth, setRevenueGrowth] = useState(0);
   
   const [loading, setLoading] = useState(true);
 
+  async function calculateSixMonthRevenueGrowth() {
+    try {
+      // Get current date
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+
+      // Calculate dates for current month and 6 months ago
+      const currentMonthStart = Timestamp.fromDate(new Date(currentYear, currentMonth, 1));
+      const currentMonthEnd = Timestamp.fromDate(new Date(currentYear, currentMonth + 1, 0));
+      
+      const sixMonthsAgoDate = new Date(currentYear, currentMonth - 6, 1);
+      const sixMonthsAgoStart = Timestamp.fromDate(sixMonthsAgoDate);
+      const sixMonthsAgoEnd = Timestamp.fromDate(new Date(sixMonthsAgoDate.getFullYear(), sixMonthsAgoDate.getMonth() + 1, 0));
+
+      // Get current month's revenue
+      const currentMonthQuery = query(
+        collection(db, "payments"),
+        where("timestamp", ">=", currentMonthStart),
+        where("timestamp", "<=", currentMonthEnd)
+      );
+
+      // Get six months ago revenue
+      const sixMonthsAgoQuery = query(
+        collection(db, "payments"),
+        where("timestamp", ">=", sixMonthsAgoStart),
+        where("timestamp", "<=", sixMonthsAgoEnd)
+      );
+
+      const [currentMonthSnapshot, sixMonthsAgoSnapshot] = await Promise.all([
+        getDocs(currentMonthQuery),
+        getDocs(sixMonthsAgoQuery)
+      ]);
+
+      let currentMonthTotal = 0;
+      let sixMonthsAgoTotal = 0;
+
+      currentMonthSnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.convenienceFee) {
+          currentMonthTotal += data.convenienceFee;
+        }
+      });
+
+      sixMonthsAgoSnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.convenienceFee) {
+          sixMonthsAgoTotal += data.convenienceFee;
+        }
+      });
+
+      const growth = sixMonthsAgoTotal === 0
+        ? 100
+        : ((currentMonthTotal - sixMonthsAgoTotal) / sixMonthsAgoTotal) * 100;
+
+      setRevenueGrowth(Math.round(growth * 100) / 100);
+    } catch (error) {
+      console.error("Error calculating six-month revenue growth:", error);
+    }
+  }
+
   useEffect(() => {
-    // Existing fetchCommissionData function from previous implementation
+    async function fetchAllTimeData() {
+      try {
+        const paymentsSnapshot = await getDocs(collection(db, "payments"));
+        
+        let totalRevenue = 0;
+        paymentsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.convenienceFee) {
+            totalRevenue += data.convenienceFee;
+          }
+        });
+        
+        setAllTimeRevenue(totalRevenue);
+        setAllTimeTransactions(paymentsSnapshot.size);
+
+        await calculateSixMonthRevenueGrowth();
+      } catch (error) {
+        console.error("Error fetching all-time data:", error);
+      }
+    }
+
+    fetchAllTimeData();
+  }, []);
+
+  useEffect(() => {
     async function fetchCommissionData() {
       try {
         const [monthName, year] = selectedCommissionMonth.split(' ');
@@ -73,12 +220,32 @@ function Reports() {
 
         setMonthlyCommission(commissionData);
         setTotalCommission(totalCommissionAmount);
+        setMonthlyTransactions(paymentsSnapshot.size);
+        
       } catch (error) {
         console.error("Error fetching commission data:", error);
       }
     }
 
-    // Existing fetchUsersData function from previous implementation
+    // async function fetchAllTimeData() {
+    //   try {
+    //     const paymentsSnapshot = await getDocs(collection(db, "payments"));
+        
+    //     let totalRevenue = 0;
+    //     paymentsSnapshot.forEach((doc) => {
+    //       const data = doc.data();
+    //       if (data.convenienceFee) {
+    //         totalRevenue += data.convenienceFee;
+    //       }
+    //     });
+        
+    //     setAllTimeRevenue(totalRevenue);
+    //     setAllTimeTransactions(paymentsSnapshot.size); 
+    //   } catch (error) {
+    //     console.error("Error fetching all-time data:", error);
+    //   }
+    // }
+
     async function fetchUsersData() {
       try {
         const [monthName, year] = selectedUsersMonth.split(' ');
@@ -120,7 +287,6 @@ function Reports() {
       }
     }
 
-    // New fetchLoginData function
     async function fetchLoginData() {
       try {
         const [monthName, year] = selectedLoginMonth.split(' ');
@@ -164,9 +330,8 @@ function Reports() {
     fetchCommissionData();
     fetchUsersData();
     fetchLoginData();
-  }, [selectedCommissionMonth, selectedUsersMonth, selectedLoginMonth]);
+  }, [selectedCommissionMonth, selectedUsersMonth, selectedLoginMonth, totalCommission]);
 
-  // Month options generation
   const monthOptions = (() => {
     const months = [];
     const currentDate = new Date();
@@ -177,7 +342,6 @@ function Reports() {
     return months;
   })();
 
-  // Chart data and options (similar to previous implementation)
   const commissionChartData = {
     labels: Object.keys(monthlyCommission).sort((a, b) => parseInt(a) - parseInt(b)),
     datasets: [
@@ -231,12 +395,12 @@ function Reports() {
       <SideMenu />
       <div className="report--content">
         <div className="header--report">
-          <h1>Overview</h1>
+          <h1>Revenue and Users Report</h1>
         </div>
         <div className="monthly">
           <div className="monthly--transactions">
             <div className="monthly--transactions--header">
-              <h2>Monthly Transactions</h2>
+              <h2>Monthly Revenue</h2>
               <div className="month-selector">
                 <select 
                   value={selectedCommissionMonth} 
@@ -255,10 +419,17 @@ function Reports() {
                 <div className="chart-container">
                   <Line data={commissionChartData} options={chartOptions} />
                 </div>
-                <h2>Total Commission Earned: ₱{totalCommission.toFixed(2)}</h2>
+                <h2>Monthly Commission Earned: ₱{totalCommission.toFixed(2)}</h2>
               </>
             )}
           </div>
+          <SummaryStats 
+                  totalTransactions={allTimeTransactions}
+                  totalRevenue={allTimeRevenue}
+                  revenueGrowth={revenueGrowth}
+                />
+        </div>
+        <div className="summary">
           <div className="monthly--users">
             <div className="monthly--users--header">
               <h2>New Users</h2>
@@ -283,83 +454,83 @@ function Reports() {
                 <h2>Total New Users: {totalNewUsers}</h2>
               </>
             )}
-          </div>
-        </div>
-        <div className="login--report">
-          <div className="login--report--header">
-            <h2>Login Activity</h2>
-            <div className="month-selector">
-              <select 
-                value={selectedLoginMonth} 
-                onChange={(e) => setSelectedLoginMonth(e.target.value)}
-              >
-                {monthOptions.map(month => (
-                  <option key={month} value={month}>{month}</option>
-                ))}
-              </select>
             </div>
-          </div>
-          {loading ? (
-            <p>Loading data...</p>
-          ) : (
-            <>
-              <div className="chart-container-logins">
-                <Bar
-                  data={{
-                    labels: loginLabels,
-                    datasets: [
-                      {
-                        label: "Logins",
-                        data: loginData,
-                        backgroundColor: "rgba(75, 192, 192, 0.6)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1,
-                      },
-                    ],
-                  }}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                      padding: {
-                        left: 50,
-                        right: 50
-                      }
-                    },
-                    plugins: {
-                      legend: {
-                        display: true,
-                      },
-                      title: {
-                        display: true,
-                        text: `Login Activity for ${selectedLoginMonth}`,
-                      },
-                    },
-                    scales: {
-                      x: {
-                        title: {
-                          display: true,
-                          text: "Day of Month",
-                        },
-                      },
-                      y: {
-                        title: {
-                          display: true,
-                          text: "Number of Logins",
-                        },
-                        beginAtZero: true,
-                        ticks: {
-                          stepSize: getStepSize(),
-                        },
-                        max: getMaxYValue(),
-                      },
-                    },
-                  }}
-                />
+          <div className="login--report">
+            <div className="login--report--header">
+              <h2>Login Activity</h2>
+              <div className="month-selector">
+                <select 
+                  value={selectedLoginMonth} 
+                  onChange={(e) => setSelectedLoginMonth(e.target.value)}
+                >
+                  {monthOptions.map(month => (
+                    <option key={month} value={month}>{month}</option>
+                  ))}
+                </select>
               </div>
-              <h2>Total Logins: {totalLogins}</h2>
-            </>
-          )}
+            </div>
+            {loading ? (
+              <p>Loading data...</p>
+            ) : (
+              <>
+                <div className="chart-container-logins">
+                  <Bar
+                    data={{
+                      labels: loginLabels,
+                      datasets: [
+                        {
+                          label: "Logins",
+                          data: loginData,
+                          backgroundColor: "rgba(75, 192, 192, 0.6)",
+                          borderColor: "rgba(75, 192, 192, 1)",
+                          borderWidth: 1,
+                        },
+                      ],
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      layout: {
+                        padding: {
+                          left: 50,
+                          right: 50
+                        }
+                      },
+                      plugins: {
+                        legend: {
+                          display: true,
+                        },
+                        title: {
+                          display: true,
+                          text: `Login Activity for ${selectedLoginMonth}`,
+                        },
+                      },
+                      scales: {
+                        x: {
+                          title: {
+                            display: true,
+                            text: "Day of Month",
+                          },
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: "Number of Logins",
+                          },
+                          beginAtZero: true,
+                          ticks: {
+                            stepSize: getStepSize(),
+                          },
+                          max: getMaxYValue(),
+                        },
+                      },
+                    }}
+                  />
+                </div>
+                <h2>Total Logins: {totalLogins}</h2>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
