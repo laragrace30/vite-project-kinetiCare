@@ -23,7 +23,7 @@ const STATUS_MAPPING = {
         therapist: {
             Pending: 'Pending Approval', 
             Active: 'Approved',          
-            Inactive: 'Inactive'         
+            Inactive: 'Deactivated'  // Corrected from 'Deactive' to 'Inactive'
         },
         patient: {
             Active: 'Active',
@@ -31,12 +31,14 @@ const STATUS_MAPPING = {
         }
     },
     database: {
-        'Pending Approval': 'Pending', // Convert back to DB format
+        'Pending Approval': 'Pending',
+        'Deactivated': 'Inactive', 
         Approved: 'Active',
         Inactive: 'Inactive',
         Active: 'Active'
     }
 };
+
 
 function Users() {
     const [activeTab, setActiveTab] = useState(0);
@@ -355,7 +357,7 @@ function Users() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
-            {activeTab === 0 ? (
+            {/* {activeTab === 0 ? (
              <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
                 <option value="">Filter by status</option>
                 {ptStatusOptions.map((status, index) => (
@@ -364,6 +366,16 @@ function Users() {
                     </option>
                 ))}
             </select>
+            ) : ( */}
+            {activeTab === 0 ? (
+                <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
+                    <option value="">Filter by status</option>
+                    {ptStatusOptions.map((status, index) => (
+                        <option key={index} value={status === "Inactive" ? "Deactivated" : status}>
+                            {status === "Inactive" ? "Deactivated" : status}
+                        </option>
+                    ))}
+                </select>
             ) : (
                 <select onChange={(e) => setStatusFilter(e.target.value)} value={healthConditionFilter}>
                 <option value="">Filter by status</option>
