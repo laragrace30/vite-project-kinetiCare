@@ -22,6 +22,7 @@ interface Therapist {
   clinicAddress: string;
   birthDate: string;
   licenseFilePath: string;
+  degreeFilePath: string;
   clinicContact: string;
   degrees: string;
   fee: string;
@@ -54,6 +55,13 @@ function TherapistDetails() {
               const fileRef = ref(storage, data.licenseFilePath);
               const downloadURL = await getDownloadURL(fileRef);
               data.licenseFilePath = downloadURL;
+            }
+
+            if (data.degreeFilePath) {
+              const storage = getStorage();
+              const fileRef = ref(storage, data.degreeFilePath);
+              const downloadURL = await getDownloadURL(fileRef);
+              data.degreeFilePath = downloadURL;
             }
 
             setTherapist(data as Therapist);
@@ -122,8 +130,7 @@ function TherapistDetails() {
       await updateDoc(therapistRef, {
         status: "Declined"
       });
-  
-      // Then send the email
+
       await sendEmail({
         to: therapist.email,
         subject: "Update on Your Therapist Application",
@@ -208,9 +215,18 @@ function TherapistDetails() {
         <div className="header2">
           <h2 className="educationDetails">Educational Details</h2>
         </div>
-        <div className="education--details">
-          <p><span>Degree:</span> {therapist.degrees}</p>
-          <p><span>Consultation Fee:</span> {therapist.fee}</p>
+        <div className="education">
+          <div className="education--details">
+            <p><span>Degree:</span> {therapist.degrees}</p>
+            <p><span>Consultation Fee:</span> {therapist.fee}</p>
+          </div>
+            {therapist.degreeFilePath && (
+              <div className="degree-section">
+                <a href={therapist.degreeFilePath} target="_blank" rel="noopener noreferrer">
+                  View Degree
+                </a>
+              </div>
+            )}
         </div>
         <div className="buttons">
           {therapist.status === "Active" ? (

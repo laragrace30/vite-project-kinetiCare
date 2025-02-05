@@ -181,14 +181,8 @@
   }
 
   .education--details{
-    background-color: white;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
-    border-radius: 15px;
-    padding: 20px;
-    margin-top: 15px;
     display: flex;
     flex-direction: column;
-    height: 250px;
   }
   
   .license-section {
@@ -206,6 +200,36 @@
   
   .license-section a:hover {
     text-decoration: underline;
+  }
+
+  .degree-section {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 65px;
+    margin-left: 300px;
+  }
+  
+  .degree-section a {
+    color: #00bfa6;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .degree-section a:hover {
+    text-decoration: underline;
+  }
+
+  .education{
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    height: 250px;
   }
   
   .buttons {

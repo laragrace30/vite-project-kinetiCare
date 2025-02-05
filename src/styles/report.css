@@ -53,6 +53,12 @@
     gap: 15px;
 }
 
+.summary{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
 .monthly--transactions{
     background-color: #fff;
     height: 400px;
@@ -108,9 +114,9 @@
 .monthly--users{
     background-color: #fff;
     height: 400px;
-    width: 434px;
+    width: 450px;
     position: relative;
-    top: 20px;
+    margin-top: 35px;
     left: 0;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
@@ -130,6 +136,7 @@
     top: 10px;
     left: 0;
     display: flex;
+    bottom: 15px;
 }
 
 .monthly--users--header{
@@ -142,18 +149,18 @@
 
 .chart-container {
     width: 434px;
-    height: 400px;
+    height: 280px;
 }
 
 .chart-container-users {
     width: 434px;
-    height: 350px;
+    height: 280px;
 }
 
 .login--report{
     background-color: #fff;
     height: 400px;
-    width: 940px;
+    width: 450px;
     position: relative;
     top: 35px;
     left: 0;
@@ -187,7 +194,169 @@
 
 .chart-container-logins {
     width: 100%; 
-    max-width: 1000px; 
+    max-width: 640px; 
     height: 280px;
     margin: 0 auto; 
   }
+
+.summary-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;  
+    align-items: start;      
+    padding: 0 20px;
+    gap: 10px;
+}
+
+.summary-transactions{
+    background-color: transparent;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border: 2px solid #5A8BD6;
+    padding: 0 20px;
+    margin-top: 40px;
+    margin-left: 75px;
+    border-radius: 15px;
+    width: 100%;
+    height: 90px;
+}
+
+.summary-trans{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.icon-trans{
+    margin-top: 40px;
+    margin-right: 15px;
+    color: cadetblue;
+    scale: 1.8;
+}
+
+.summary-value-trans{
+    color: black;
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    margin-bottom: 10px;
+    margin-left: 80px;
+}
+
+.summary-span{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.summary-text-trans{
+    color: #707070;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto';
+    position: relative;
+    top: 10px;
+    left: 0;
+    display: flex;
+    bottom: 15px;
+}
+
+.summary-revenue{
+    background-color: transparent;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border: 2px solid #00BFA6;
+    padding: 0 20px;
+    margin-top:20px;
+    margin-left: 75px;
+    border-radius: 15px;
+    width: 100%;
+    height: 90px;
+}
+
+.summary-rev{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.icon-coins{
+    margin-top: 40px;
+    margin-right: 15px;
+    color: #e7e40d;
+    scale: 1.8;
+}
+
+.summary-text-rev{
+    color: #707070;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto';
+    position: relative;
+    top: 10px;
+    left: 0;
+    display: flex;
+    bottom: 15px;
+}
+
+.summary-value-rev{
+    color: black;
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    margin-bottom: 10px;
+    margin-left: 80px;
+}
+
+.summary-revenue-growth{
+    background-color: transparent;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    border: 2px solid turquoise;
+    padding: 0 20px;
+    margin-top:20px;
+    margin-left: 75px;
+    border-radius: 15px;
+    width: 100%;
+    height: 90px;
+}
+
+.summary-revgrowth{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.icon-trending{
+    margin-top: 40px;
+    margin-right: 15px;
+    color: lightgreen;
+    scale: 1.8;
+}
+
+.value-green{
+    color: green;
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    margin-bottom: 10px;
+    margin-left: 80px;
+}
+
+.value-red{
+    color: red;
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    margin-bottom: 10px;
+    margin-left: 80px;
+}
+
+.summary-text-revgrowth{
+    color: black;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    position: relative;
+    top: 10px;
+    left: 0;
+    display: flex;
+    bottom: 15px;
+}
