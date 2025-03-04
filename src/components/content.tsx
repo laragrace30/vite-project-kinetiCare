@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../index.css';
 import { db } from '../firebase/firebase';
 import { collection, getDocs, query, where, Timestamp } from "firebase/firestore";
@@ -14,6 +15,7 @@ interface Therapist {
 }
 
 const Content = () => {
+  const navigate = useNavigate();
   const [therapistCount, setTherapistCount] = useState(0);
   const [patientCount, setPatientCount] = useState(0);
   const [commissionEarned, setCommissionEarned] = useState(0);
@@ -24,13 +26,21 @@ const Content = () => {
       try {
         const usersCollection = collection(db, "users");
         
-        const therapistQuery = query(usersCollection, where("accountType", "==", "therapist"));
-        const therapistSnapshot = await getDocs(therapistQuery);
-        setTherapistCount(therapistSnapshot.size); 
+        const activeTherapistQuery = query(
+          usersCollection, 
+          where("accountType", "==", "therapist"),
+          where("status", "==", "Active")
+        );
+        const activeTherapistSnapshot = await getDocs(activeTherapistQuery);
+        setTherapistCount(activeTherapistSnapshot.size); 
 
-        const patientQuery = query(usersCollection, where("accountType", "==", "patient"));
-        const patientSnapshot = await getDocs(patientQuery);
-        setPatientCount(patientSnapshot.size); 
+        const activePatientQuery = query(
+          usersCollection, 
+          where("accountType", "==", "patient"),
+          where("status", "==", "Active")
+        );
+        const activePatientSnapshot = await getDocs(activePatientQuery);
+        setPatientCount(activePatientSnapshot.size);  
 
         const pendingTherapistQuery = query(
           usersCollection, 
@@ -54,31 +64,13 @@ const Content = () => {
 
         setCommissionEarned(totalCommission);
 
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
     };
 
     fetchCounts();
   }, []);
-
-  const card =[
-    {
-      title: 'Active Patients',
-      content: `${patientCount}`,
-      image: "src/assets/patients.png"
-    },
-    {
-      title: 'Active Therapists',
-      content: `${therapistCount}`,
-      image: "src/assets/therapist.png"
-    },
-    {
-      title: 'Commission Earned',
-      content: `PHP ${commissionEarned}`,
-      image: "src/assets/commission.png"
-    }
-  ]
 
   const formatDate = (timestamp: Timestamp | undefined) => {
     if (!timestamp) return 'N/A';
@@ -95,10 +87,32 @@ const Content = () => {
         hour12: true,
         timeZone: 'Asia/Manila' 
       });
-    } catch (error) {
+    } catch {
       return 'N/A';
     }
   };
+
+  const handleTherapistClick = (therapistId: string) => {
+    navigate(`/therapistDetails/${therapistId}`);
+  };
+
+  const card = [
+    {
+      title: 'Active Patients',
+      content: `${patientCount}`,
+      image: "src/assets/patients.png"
+    },
+    {
+      title: 'Active Therapists',
+      content: `${therapistCount}`,
+      image: "src/assets/therapist.png"
+    },
+    {
+      title: 'Commission Earned',
+      content: `PHP ${commissionEarned}`,
+      image: "src/assets/commission.png"
+    }
+  ];
 
   return (
     <div>
@@ -112,14 +126,18 @@ const Content = () => {
         ))}
       </div>
 
-       {pendingTherapists.length > 0 && (
+      {pendingTherapists.length > 0 && (
         <div className='pending-therapists-section'>
           <h4 className="pending">Pending Therapists</h4>
           <div className='table-container'>
             <table className='pending-therapists-table'>
               <tbody>
                 {pendingTherapists.map((therapist) => (
-                  <tr key={therapist.id} className='table-row'>
+                  <tr 
+                    key={therapist.id} 
+                    className='table-row clickable-row'
+                    onClick={() => handleTherapistClick(therapist.id)}
+                  >
                     <td>
                       <div className='therapist-name'>{therapist.firstName} {therapist.lastName}</div>
                       <div className='therapist-specialization'>{therapist.specialization || 'No Specialization'}</div>

@@ -23,7 +23,7 @@ const STATUS_MAPPING = {
         therapist: {
             Pending: 'Pending Approval', 
             Active: 'Approved',          
-            Inactive: 'Deactivated'  // Corrected from 'Deactive' to 'Inactive'
+            Inactive: 'Deactivated'  
         },
         patient: {
             Active: 'Active',
@@ -69,39 +69,11 @@ function Users() {
             : STATUS_MAPPING.display.patient;
         return mappings[dbStatus as keyof typeof mappings] || dbStatus;
     };
-    // const getDatabaseStatus = useCallback((displayStatus: string): string => {
-    //     if (activeTab === 0) {
-    //         return STATUS_MAPPING.database[displayStatus as keyof typeof STATUS_MAPPING.database] || displayStatus;
-    //     }
-    //     return displayStatus === 'Active' ? 'Active' : 'Inactive';
-    // }, [activeTab]);
 
     const getDatabaseStatus = useCallback((displayStatus: string): string => {
         return STATUS_MAPPING.database[displayStatus as keyof typeof STATUS_MAPPING.database] || displayStatus;
     }, []);    
 
-    // useEffect(() => {
-    //     const fetchStatusOptions = async () => {
-    //         try {
-    //             const usersRef = collection(db, 'users');
-    //             const snapshot = await getDocs(usersRef);
-    //             const statuses = new Set<string>();
-
-    //             snapshot.forEach(doc => {
-    //                 const userData = doc.data();
-    //                 if (userData.status) {
-    //                     statuses.add(userData.status);
-    //                 }
-    //             });
-
-    //             setStatusOptions(Array.from(statuses));
-    //         } catch (error) {
-    //             console.error("Error fetching status options: ", error);
-    //         }
-    //     };
-
-    //     fetchStatusOptions();
-    // }, []);
 
     useEffect(() => {
         const fetchPTStatus = async () => {
@@ -154,22 +126,6 @@ function Users() {
         fetchSpecializations();
     }, []);
 
-    // useEffect(() => {
-    //     const fetchSpecializations = async () => {
-    //         try {
-    //             const specializationsQuery = await getDocs(collection(db, 'specializations'));
-    //             const fetchedSpecializations = specializationsQuery.docs.map(doc => ({
-    //                 id: doc.id,
-    //                 name: doc.data().name
-    //             }));
-    //             setSpecializations(fetchedSpecializations);
-    //         } catch (error) {
-    //             console.error('Error fetching specializations:', error);
-    //         }
-    //     };
-    //     fetchSpecializations();
-    // }, []);
-
 
     useEffect(() => {
         const fetchInjuryOptions = async () => {
@@ -199,16 +155,6 @@ function Users() {
                     ...doc.data()
                 })) as User[];
         
-                // const filteredUsers = usersData.filter(user => {
-                //     const nameMatch = `${user.firstName} ${user.lastName}`
-                //         .toLowerCase()
-                //         .includes(searchQuery.toLowerCase());
-        
-                //     const statusMatch = !statusFilter || user.status === getDatabaseStatus(statusFilter);
-                //     const specializationMatch = activeTab === 0 ? !specializationFilter || user.specialization === specializationFilter : true;
-                //     const healthConditionMatch = activeTab === 1 ? !healthConditionFilter || user.injury === healthConditionFilter : true;
-        
-                //     return nameMatch && statusMatch && specializationMatch && healthConditionMatch;
                 // });
                 const filteredUsers = usersData.filter(user => {
                     const nameMatch = `${user.firstName} ${user.lastName}`
@@ -270,14 +216,7 @@ function Users() {
         }
     };
 
-    // const handleToggleStatus = (e: React.ChangeEvent<HTMLInputElement>, id: string, currentStatus: string) => {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-        
-    //     const currentDisplayStatus = getDisplayStatus(currentStatus);
-    //     const newDisplayStatus = currentDisplayStatus === 'Approved' ? 'Deactivated' : 'Approved';
-    //     updateUserStatus(id, newDisplayStatus);
-    // };
+
     const handleToggleStatus = (e: React.ChangeEvent<HTMLInputElement>, id: string, currentStatus: string) => {
         e.preventDefault();
         e.stopPropagation();

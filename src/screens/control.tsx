@@ -192,120 +192,6 @@ function Controls() {
   const hasEmptyFields = Object.values(inputValues).some(value => value === '');
 
   return (
-//     <div className="container">
-//   <SideMenu />
-//   <div className="details--content">
-//     <div className="controls--header">
-//       <h2 className="controls">System Controls</h2>
-//     </div>
-
-//     {/* First Row */}
-//     <div className="controls-row">
-//       {/* Recommendation Weights Configuration (First Column) */}
-//       <div className="controls-column">
-//         <div className="controls-section">
-//           <h3>Recommendation Weights Configuration</h3>
-//           <div className="controls-content">
-//             <div className="weights-card">
-//               {error && <div className="error-message">{error}</div>}
-//               {Object.keys(weights).map((key) => (
-//                 <div className="weight-input-group" key={key}>
-//                   <label>{key.charAt(0).toUpperCase() + key.slice(1)} Weight (%)</label>
-//                   <input
-//                     type="number"
-//                     value={inputValues[key as keyof Weights]}
-//                     onChange={(e) => handleWeightChange(key as keyof Weights, e.target.value)}
-//                     min="0"
-//                     max="100"
-//                   />
-//                 </div>
-//               ))}
-//               <div className="weight-total">
-//                 <p>
-//                   Total: {hasEmptyFields ? '-' : total.toFixed(1)}%{' '}
-//                   {!hasEmptyFields && !isValid && (
-//                     <span className="invalid">(Must equal 100% to save)</span>
-//                   )}
-//                 </p>
-//               </div>
-//               <button
-//                 onClick={saveWeights}
-//                 disabled={isLoading || hasEmptyFields || !isValid}
-//                 className="save-button"
-//               >
-//                 {isLoading ? 'Saving...' : 'Save Weights'}
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Commission Fee Configuration (Second Column) */}
-//       <div className="controls-column">
-//         <div className="controls-section">
-//           <h3>Commission Fee Configuration</h3>
-//           <div className="controls-content">
-//             <div className="commission-card">
-//               {commissionError && <div className="error-message">{commissionError}</div>}
-//               <div className="commission-input-group">
-//                 <label>Commission Fee (%)</label>
-//                 <input
-//                   type="number"
-//                   value={platformFeeInput}
-//                   onChange={(e) => handlePlatformFeeChange(e.target.value)}
-//                   min="0"
-//                   max="100"
-//                 />
-//               </div>
-//               <p className="text">
-//                 This is the percentage fee that the platform will charge for each consultation.
-//               </p>
-//               <button
-//                 onClick={savePlatformFee}
-//                 disabled={isCommissionLoading || platformFeeInput === '' || platformFee < 0 || platformFee > 100}
-//                 className="fee-button"
-//               >
-//                 {isCommissionLoading ? 'Saving...' : 'Save Changes'}
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-
-//     {/* Second Row (Single Centered Column for Specializations) */}
-//     <div className="controls-row centered">
-//       <div className="controls-column full-width">
-//         <div className="controls-section">
-//           <h3>Manage Specializations</h3>
-//           <div className="controls-content">
-//             <div className="specialization-card">
-//               <div className="specialization-input-group">
-//                 <label>Add New Specialization</label>
-//                 <input
-//                   type="text"
-//                   value={newSpecialization}
-//                   onChange={handleNewSpecializationChange}
-//                 />
-//                 <button onClick={addSpecialization} className="add-specialization-button">
-//                   Add Specialization
-//                 </button>
-//               </div>
-//               <div className="specialization-list">
-//                 <h4>Current Specializations</h4>
-//                 <ul>
-//                   {specializations.map((specialization, index) => (
-//                     <li key={index}>{specialization}</li>
-//                   ))}
-//                 </ul>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// </div>
     <div className="container">
       <SideMenu />
       <div className="details--content">
@@ -313,6 +199,7 @@ function Controls() {
           <h2 className="controls">System Controls</h2>
         </div>
         <div className="controls-container">
+          {/* Recommendation Weights Container */}
           <div className="controls--container1">
             <div className="controls-section--weights">
               <h3 className="weights--feedback">Recommendation Weights Configuration</h3>
@@ -329,7 +216,6 @@ function Controls() {
                       max="100"
                     />
                   </div>
-
                   <div className="weight-input-group">
                     <label>Location Weight (%)</label>
                     <input
@@ -340,7 +226,6 @@ function Controls() {
                       max="100"
                     />
                   </div>
-
                   <div className="weight-input-group">
                     <label>Fee Weight (%)</label>
                     <input
@@ -351,7 +236,6 @@ function Controls() {
                       max="100"
                     />
                   </div>
-
                   <div className="weight-input-group">
                     <label>Experience Weight (%)</label>
                     <input
@@ -362,7 +246,6 @@ function Controls() {
                       max="100"
                     />
                   </div>
-
                   <div className="weight-input-group">
                     <label>Therapist Rating Weight (%)</label>
                     <input
@@ -373,7 +256,6 @@ function Controls() {
                       max="100"
                     />
                   </div>
-
                   <div className="weight-total">
                     <p>
                       Total: {hasEmptyFields ? '-' : total.toFixed(1)}%{' '}
@@ -382,7 +264,6 @@ function Controls() {
                       )}
                     </p>
                   </div>
-                  
                   <button
                     onClick={saveWeights}
                     disabled={isLoading || hasEmptyFields || !isValid}
@@ -394,46 +275,14 @@ function Controls() {
               </div>
             </div>
           </div>
-
-          {/* <div className="controls-section--specializations">
-            <h3 className="specializations--feedback">Manage Specializations</h3>
-            <div className="controls-content">
-              <div className="specialization-card">
-                <div className="specialization-input-group">
-                  <label>Add New Specialization</label>
-                  <input
-                    type="text"
-                    value={newSpecialization}
-                    onChange={handleNewSpecializationChange}
-                  />
-                </div>
-
-                <button
-                  onClick={addSpecialization}
-                  className="add-specialization-button"
-                >
-                  Add Specialization
-                </button>
-
-                <div className="specialization-list">
-                  <h4>Current Specializations</h4>
-                  <ul>
-                    {specializations.map((specializations, index) => (
-                      <li key={index}>{specializations}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-            </div> */}
-
-          
-            <div className="controls-container2">
+  
+          {/* Commission Fee Container */}
+          <div className="controls-container2">
+            <div className="controls-section--commission">
               <h3 className="commission-feedback">Commission Fee Configuration</h3>
               <div className="controls-content">
                 <div className="commission-card">
                   {commissionError && <div className="error-message">{commissionError}</div>}
-
                   <div className="commission-input-group">
                     <label>Commission Fee (%)</label>
                     <input
@@ -445,12 +294,10 @@ function Controls() {
                       placeholder="Enter platform fee percentage"
                     />
                   </div>
-
                   <p className="text">
                     This is the percentage fee that the platform will charge for each consultation.
                     The remaining amount will go to the therapist.
                   </p>
-
                   <button
                     onClick={savePlatformFee}
                     disabled={isCommissionLoading || platformFeeInput === '' || platformFee < 0 || platformFee > 100}
@@ -460,45 +307,47 @@ function Controls() {
                   </button>
                 </div>
               </div>
-
-              <div className="controls-section--specializations">
-            <h3 className="specializations--feedback">Manage Specializations</h3>
-            <div className="controls-content">
-              <div className="specialization-card">
-                <div className="specialization-input-group">
-                  <label className="specialization-label">Add New Specialization</label>
-                  <input
-                    type="text"
-                    value={newSpecialization}
-                    onChange={handleNewSpecializationChange}
-                    className="specialization-input"
-                  />
+            </div>
+          </div>
+  
+          {/* Specializations Container */}
+          <div className="controls-container3">
+            <div className="controls-section--specializations">
+              <h3 className="specializations--feedback">Manage Specializations</h3>
+              <div className="controls-content">
+                <div className="specialization-card">
+                  <div className="specialization-input-group">
+                    <label className="specialization-label">Add New Specialization</label>
+                    <input
+                      type="text"
+                      value={newSpecialization}
+                      onChange={handleNewSpecializationChange}
+                      className="specialization-input"
+                    />
+                  </div>
+                  <div className="specialization-list">
+                    <h4 className="specialization-current">Current Specializations</h4>
+                    <div className="specialization-list-scroll">
+                      <ul>
+                        {specializations.map((specialization, index) => (
+                          <li className="specialization-item" key={index}>{specialization}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                  <button
+                    onClick={addSpecialization}
+                    className="add-specialization-button"
+                  >
+                    Add Specialization
+                  </button>
                 </div>
-
-                <button
-                  onClick={addSpecialization}
-                  className="add-specialization-button"
-                >
-                  Add Specialization
-                </button>
-
-                <div className="specialization-list">
-                <h4>Current Specializations</h4>
-                <ul>
-                  {specializations.map((specialization, index) => (
-                    <li key={index}>{specialization}</li>
-                  ))}
-                </ul>
               </div>
-
-              </div>
-            </div>
-            </div>
-
             </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 
